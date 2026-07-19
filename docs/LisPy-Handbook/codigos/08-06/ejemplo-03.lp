@@ -1,0 +1,8 @@
+(defun execute-query (fields table condition order limit)
+  (let ((df (pandas-read-csv (format nil "~A.csv" table))))
+    (when fields (setf df (pandas-select df fields)))
+    (when condition (setf df (pandas-filter df (lambda (row)
+                      (eval-condition condition row)))))
+    (when order (setf df (pandas-sort df order)))
+    (when limit (setf df (pandas-head df limit)))
+    df))

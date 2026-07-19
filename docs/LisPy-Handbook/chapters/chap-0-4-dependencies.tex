@@ -1,0 +1,69 @@
+\chapter{Mapa de Dependencias entre Capítulos}
+\label{chap:deps}
+
+Este capítulo describe el grafo de prerrequisitos entre capítulos,
+permitiendo al lector planificar una lectura no lineal cuando sea necesario.
+
+\section{Base Universal}
+
+La Parte I (Fundamentos) es el único punto de entrada verdadero. No tiene
+dependencias previas y es requisito para todas las demás partes.
+
+\section{Dependencias por Parte}
+
+\begin{itemize}
+\item \textbf{Parte II} (El Núcleo Lisp) depende de la Parte I: sintaxis,
+  tipos, control de flujo.
+\item \textbf{Parte III} (El Puente Python) depende de las Partes I y II:
+  funciones, símbolos, macros.
+\item \textbf{Parte IV} (Programación Híbrida) depende de las Partes I, II y
+  III: puente Python, CLOS, macros.
+\item \textbf{Parte V} (Meta-Programación) depende de las Partes I--IV.
+\item \textbf{Parte VI} (Matemáticas Aplicadas) depende de las Partes I, III
+  y IV: \texttt{numpy-fast}, \texttt{sympy-bridge}, \texttt{defmath}.
+\item \textbf{Parte VII} (Ingeniería de Sistemas) depende de las Partes I y
+  II: compilación, CLI, sistema.
+\item \textbf{Parte VIII} (Estudios de Caso) depende de las Partes I--VI
+  según el caso de estudio específico.
+\end{itemize}
+
+\section{Matriz de Prerrequisitos}
+
+\begin{center}
+\small
+\begin{tabular}{lccccccccc}
+\toprule
+\textbf{Capítulo} & \textbf{I} & \textbf{II} & \textbf{III} & \textbf{IV} & \textbf{V} & \textbf{VI} & \textbf{VII} \\
+\midrule
+I (1.1--1.8) & -- & -- & -- & -- & -- & -- & -- \\
+II (2.1--2.9) & $\bullet$ & -- & -- & -- & -- & -- & -- \\
+III (3.1--3.9) & $\bullet$ & $\bullet$ & -- & -- & -- & -- & -- \\
+IV (4.1--4.11) & $\bullet$ & $\bullet$ & $\bullet$ & -- & -- & -- & -- \\
+V (5.1--5.8) & $\bullet$ & $\bullet$ & $\bullet$ & $\bullet$ & -- & -- & -- \\
+VI (6.1--6.8) & $\bullet$ & -- & $\bullet$ & $\bullet$ & -- & -- & -- \\
+VII (7.1--7.7) & $\bullet$ & $\bullet$ & -- & -- & -- & -- & -- \\
+VIII (8.1--8.7) & $\bullet$ & $\bullet$ & $\bullet$ & $\bullet$ & $\circ$ & $\circ$ & $\circ$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Leyenda: $\bullet$ = requisito directo, $\circ$ = requisito parcial.
+
+\section{Capítulos Autocontenidos}
+
+Los siguientes capítulos pueden leerse de forma independiente, marcados con
+$(*)$ para lectura no lineal:
+
+\begin{itemize}
+\item Capítulo 2.7 -- LOOP avanzado $(*)$
+\item Capítulo 3.9 -- FFI directa $(*)$
+\item Capítulo 4.8 -- Persistencia $(*)$
+\item Capítulo 7.3 -- Gestión de paquetes pip $(*)$
+\item Capítulo 7.5 -- Pruebas $(*)$
+\end{itemize}
+
+\section{Recomendación de Orden}
+
+Para cada ruta de aprendizaje (ver Capítulo~\ref{chap:roadmap}, se recomienda
+seguir el orden numérico dentro de las partes seleccionadas. Los capítulos
+autocontenidos pueden intercalarse según el interés del lector.

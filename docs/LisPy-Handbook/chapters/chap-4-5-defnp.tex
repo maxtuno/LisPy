@@ -1,0 +1,22 @@
+\chapter{\texttt{defnp}: Despacho Automático}
+\label{chap:defnp}
+{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$} Avanzado
+
+\section{El Macro defnp}
+\begin{lispcode}
+(defnp vec-distance (x y) (sqrt (+ (expt x 2) (expt y 2))))
+\end{lispcode}
+
+\section{Modo Escalar}
+\begin{lispcode}
+(vec-distance 3 4)  ;; → 5.0 (Lisp nativo)
+\end{lispcode}
+
+\section{Modo Vectorizado}
+\begin{lispcode}
+(let ((xs (numpy-array '(3 4))) (ys (numpy-array '(4 3))))
+  (vec-distance xs ys))  ;; → array([5., 5.])
+\end{lispcode}
+
+La detección es automática: si los argumentos son \texttt{VALUE\_PYTHON}, usa NumPy.
+

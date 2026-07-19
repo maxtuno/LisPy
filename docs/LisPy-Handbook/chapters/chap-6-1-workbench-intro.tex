@@ -1,0 +1,33 @@
+\chapter{El Workbench Matemático Híbrido}
+\label{chap:workbench-intro}
+{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$} Experto
+
+\section{Arquitectura}
+\begin{itemize}
+\item \texttt{defmath}: macro para funciones híbridas
+\item \texttt{sympy-bridge}: cálculo simbólico
+\item \texttt{numpy-fast}: cómputo numérico vectorizado
+\item Matplotlib: visualización
+\end{itemize}
+
+\section{Flujo de Trabajo}
+Definir $\rightarrow$ Derivar $\rightarrow$ Evaluar $\rightarrow$ Visualizar.
+
+\begin{examplebox}[title=Flujo completo]
+\begin{lispcode}
+(load "lib/defmath.lp")
+(defmath f (x) (sin (* 2 x)))
+
+;; Derivar
+(let ((df (sympy-derive (f-sym 'x) 'x))) (sympy-latex df))
+
+;; Evaluar
+(let ((xs (numpy-linspace 0 (* 2 pi) 1000))) (f-num xs))
+
+;; Visualizar (vía matplotlib)
+(py:run "import matplotlib.pyplot as plt; import numpy as np
+xs = np.linspace(0, 2*np.pi, 1000)
+plt.plot(xs, np.sin(2*xs)); plt.savefig('sin2x.png')")
+\end{lispcode}
+\end{examplebox}
+

@@ -1,0 +1,21 @@
+\chapter{CLI y Entorno de Ejecución}
+\label{chap:cli}
+{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$} Experto
+
+\section{Argumentos}
+\begin{verbatim}
+lispy.exe --version
+lispy.exe --help
+lispy.exe --repl
+lispy.exe -i script.lp
+lispy.exe -c archivo.lp
+lispy.exe -e "(+ 1 2)"
+\end{verbatim}
+
+\section{Entornos Virtuales}
+\begin{verbatim}
+lispy.exe --venv mi_entorno
+lispy.exe --venv mi_entorno script.lp
+\end{verbatim}
+Configura automáticamente \texttt{PYTHONHOME} y \texttt{VIRTUAL\_ENV}.
+

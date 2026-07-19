@@ -1,0 +1,47 @@
+\chapter{Migración Python a Híbrido}
+\label{chap:migration}
+{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$} Experto
+
+\section{Estrategia Incremental}
+\begin{enumerate}
+\item Envolver funciones Python con \texttt{defpyfun}
+\item Reescribir lógica de negocio en Lisp
+\item Macros para generación de código
+\item Configuración como S-expressions
+\end{enumerate}
+
+\section{Fase 1: Envolver}
+\begin{lispcode}
+(defpyfun process-data (data factor)
+  "return [x * factor for x in data]"
+  :as process-data-py)
+(process-data-py '(1 2 3) 10)
+\end{lispcode}
+
+\section{Fase 2: Reescribir}
+\begin{lispcode}
+(defun calculate-discount (price customer-type)
+  (case customer-type
+    (:premium (* price 0.8))
+    (:regular (* price 0.95))
+    (otherwise price)))
+\end{lispcode}
+
+\section{Fase 3: Macros}
+\begin{lispcode}
+(defmacro def-transformation (name transform-fn)
+  `(defpyfun ,(intern (format nil "~A-PY" name)) (data)
+     ,(format nil "return [~A(x) for x in data]" transform-fn)
+     :as ,(intern (format nil "~A-PY" name))))
+(def-transformation double (* 2))
+(def-transformation square (** 2))
+\end{lispcode}
+
+\section{Coexistencia}
+\begin{lispcode}
+(defun test-both (test-case)
+  (let ((py-result (process-data-py (first test-case) (second test-case)))
+        (lisp-result (process-data-lisp (first test-case) (second test-case))))
+    (assert (equal py-result lisp-result))))
+\end{lispcode}
+

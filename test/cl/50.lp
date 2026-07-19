@@ -1,0 +1,16 @@
+;; CL-50: Trigonometric functions
+(defun trig-table (degrees)
+  (let ((radians (float (/ (* degrees pi) 180))))
+    (format t "  sin(~D) = ~,4F~%" degrees (sin radians))
+    (format t "  cos(~D) = ~,4F~%" degrees (cos radians))
+    (format t "  tan(~D) = ~,4F~%" degrees (tan radians))
+    (format t "  asin(sin ) = ~,4F rad~%" (asin (sin radians)))
+    (format t "  acos(cos ) = ~,4F rad~%" (acos (cos radians)))))
+
+(format t "Trigonometric values:~%")
+(trig-table 30)
+(format t "~%")
+(trig-table 45)
+(format t "~%")
+(trig-table 60)
+(format t "~%PI = ~F~%" pi)

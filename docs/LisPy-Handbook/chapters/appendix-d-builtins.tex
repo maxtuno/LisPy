@@ -1,0 +1,72 @@
+\chapter{Builtins del Intérprete}
+\label{app:builtins}
+
+\section*{Funciones Lisp Estándar}
+
+\begin{center}
+\begin{longtable}{ll}
+\toprule
+\textbf{Función} & \textbf{Descripción} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+\texttt{+ - * /} & Aritméticas básicas \\
+\texttt{1+ 1-} & Incremento/decremento \\
+\texttt{abs} & Valor absoluto \\
+\texttt{expt sqrt} & Exponenciación y raíz \\
+\texttt{sin cos tan} & Trigonométricas \\
+\texttt{asin acos atan} & Trigonométricas inversas \\
+\texttt{sinh cosh tanh} & Hiperbólicas \\
+\texttt{exp log} & Exponencial y logaritmo \\
+\texttt{floor ceiling truncate round} & Redondeo \\
+\texttt{mod rem} & Módulo y resto \\
+\texttt{max min} & Máximo/mínimo \\
+\texttt{random} & Número aleatorio \\
+\texttt{= < > <= >=} & Comparaciones numéricas \\
+\texttt{eq eql equal equalp} & Comparaciones de objetos \\
+\texttt{and or not} & Lógicos \\
+\texttt{car cdr cons} & Operaciones de lista \\
+\texttt{first second ... tenth} & Acceso posicional \\
+\texttt{nth nthcdr} & Acceso indexado \\
+\texttt{list append reverse} & Construcción de listas \\
+\texttt{length} & Longitud \\
+\texttt{member find position} & Búsqueda \\
+\texttt{count} & Conteo \\
+\texttt{remove delete} & Eliminación \\
+\texttt{substitute} & Sustitución \\
+\texttt{sort stable-sort} & Ordenamiento \\
+\texttt{merge} & Mezcla \\
+\texttt{map mapcar mapcan} & Mapeo \\
+\texttt{reduce} & Reducción \\
+\texttt{every some notevery notany} & Cuantificadores \\
+\texttt{make-array aref} & Vectores \\
+\texttt{vector-push vector-pop} & Vectores ajustables \\
+\texttt{make-hash-table gethash} & Hash tables \\
+\texttt{remhash clrhash maphash} & Hash tables \\
+\texttt{if when unless cond case} & Condicionales \\
+\texttt{and or} & Short-circuit \\
+\texttt{let let*} & Ámbito léxico \\
+\texttt{setq setf psetq psetf} & Asignación \\
+\texttt{incf decf rotatef shiftf} & Modificación \\
+\texttt{progn block return-from} & Secuenciación \\
+\texttt{tagbody go} & Saltos \\
+\texttt{dotimes dolist loop do} & Iteración \\
+\texttt{defun lambda flet labels} & Funciones \\
+\texttt{defmacro macrolet} & Macros \\
+\texttt{funcall apply} & Invocación \\
+\texttt{values multiple-value-bind} & Múltiples valores \\
+\texttt{defclass defmethod defgeneric} & CLOS \\
+\texttt{make-instance slot-value} & Instancias \\
+\texttt{handler-case handler-bind} & Condiciones \\
+\texttt{error cerror warn} & Señalización \\
+\texttt{restart-case restart-bind} & Re-inicios \\
+\texttt{format print princ} & E/S \\
+\texttt{open close with-open-file} & Archivos \\
+\texttt{read read-line read-char} & Lectura \\
+\texttt{compile load eval} & Evaluación \\
+\texttt{provide require} & Módulos \\
+\texttt{trace untrace time} & Depuración \\
+\end{longtable}
+\end{center}
+

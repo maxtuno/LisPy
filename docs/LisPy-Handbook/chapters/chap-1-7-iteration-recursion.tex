@@ -1,0 +1,53 @@
+\chapter{Iteración y Recursión}
+\label{chap:iteration}
+{\huge$\bigstar$} Principiante
+
+\section{Iteración Simple}
+\begin{lispcode}
+(dotimes (i 5) (print i))
+(dolist (x '(a b c)) (print x))
+\end{lispcode}
+
+\section{LOOP}
+\begin{lispcode}
+(loop for i from 1 to 5 collect (* i i))
+(loop for x in '(3 1 4 1 5) sum x)
+(loop for x in '(3 1 4 1 5) maximize x)
+\end{lispcode}
+
+\section{DO y DO*}
+\begin{lispcode}
+(do ((i 0 (1+ i)) (sum 0 (+ sum i))) ((> i 10) sum) (print i))
+\end{lispcode}
+
+\section{Recursión}
+\begin{lispcode}
+(defun factorial (n) (if (<= n 1) 1 (* n (factorial (- n 1)))))
+(defun factorial-tail (n)
+  (labels ((iter (acc m) (if (<= m 1) acc (iter (* acc m) (- m 1)))))
+    (iter 1 n)))
+\end{lispcode}
+
+\section{Salida No Local}
+\begin{lispcode}
+(block busqueda
+  (dotimes (i 10) (dotimes (j 10) (if (= i j 5) (return-from busqueda (list i j))))))
+(catch 'found
+  (dolist (x '(1 2 3 4 5)) (if (= x 3) (throw 'found :encontrado) (print x))))
+\end{lispcode}
+
+\begin{examplebox}[title=LOOP para Project Euler \#1]
+\begin{lispcode}
+(defun euler-1 ()
+  (loop for i from 1 below 1000
+        when (or (= (mod i 3) 0) (= (mod i 5) 0)) sum i))
+\end{lispcode}
+\end{examplebox}
+
+\begin{examplebox}[title=MCD con DO*]
+\begin{lispcode}
+(defun mcd (a b) (do* ((x a y) (y b (mod x y))) ((= y 0) x)))
+(mcd 48 18)
+\end{lispcode}
+\end{examplebox}
+

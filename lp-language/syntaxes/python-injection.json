@@ -1,0 +1,10 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "scopeName": "inline.python.lp",
+  "injectionSelector": "L:meta.embedded.python.lp",
+  "patterns": [
+    {
+      "match": "\\\\.", "name": "constant.character.escape.lp"
+    }
+  ]
+}

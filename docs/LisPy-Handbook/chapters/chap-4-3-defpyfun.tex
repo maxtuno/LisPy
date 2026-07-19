@@ -1,0 +1,27 @@
+\chapter{\texttt{defpyfun}: Funciones Python con Captura Lisp}
+\label{chap:defpyfun}
+{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$} Avanzado
+
+\section{Definición}
+\begin{lispcode}
+(let ((factor 3.1416))
+  (defpyfun scale (x) "return x * factor" :as scale-py))
+(scale-py 10)
+\end{lispcode}
+
+\section{Mecanismo de Captura}
+Las variables libres se serializan como argumentos por defecto:
+\begin{verbatim}
+def scale(x, _captured_factor=3.1416):
+    factor = _captured_factor
+    return x * factor
+\end{verbatim}
+
+\begin{examplebox}[title=Leaky ReLU con parámetros capturados]
+\begin{lispcode}
+(let ((alpha 0.01))
+  (defpyfun leaky-relu (x) "return x if x > 0 else alpha * x" :as lrelu-py))
+(lrelu-py -2)
+\end{lispcode}
+\end{examplebox}
+

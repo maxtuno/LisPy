@@ -1,0 +1,59 @@
+\chapter{CLOS: Common Lisp Object System (Fundamentos)}
+\label{chap:clos-basics}
+{\huge$\bigstar$}{\huge$\bigstar$} Intermedio
+
+\section{Definición de Clases}
+\begin{lispcode}
+(defclass punto ()
+  ((x :initarg :x :initform 0 :accessor punto-x)
+   (y :initarg :y :initform 0 :accessor punto-y)))
+(defclass punto-3d (punto) ((z :initarg :z :initform 0 :accessor punto-z)))
+\end{lispcode}
+
+\section{Creación de Instancias}
+\begin{lispcode}
+(defvar *p* (make-instance 'punto :x 3 :y 4))
+(punto-x *p*)
+(setf (punto-x *p*) 5)
+(slot-value *p* 'y)
+\end{lispcode}
+
+\section{Acceso Conciso}
+\begin{lispcode}
+(defmethod mostrar ((p punto))
+  (with-slots (x y) p (format t "Punto(~D, ~D)~%" x y)))
+\end{lispcode}
+
+\section{Funciones Genéricas}
+\begin{lispcode}
+(defgeneric area (figura))
+(defmethod area ((p punto)) 0)
+(defmethod area ((c circulo)) (* pi (expt (circulo-radio c) 2)))
+\end{lispcode}
+
+\section{Especializadores EQL}
+\begin{lispcode}
+(defgeneric tasa-impuesto (pais))
+(defmethod tasa-impuesto ((pais (eql :us))) 0.15)
+(defmethod tasa-impuesto ((pais (eql :uk))) 0.20)
+(defmethod tasa-impuesto (pais) 0.25)
+\end{lispcode}
+
+\begin{examplebox}[title=Jerarquía de figuras geométricas]
+\begin{lispcode}
+(defclass shape () ((color :initarg :color :initform :black)))
+(defclass circle (shape) ((radius :initarg :radius :initform 1)))
+(defclass rectangle (shape) ((width :initarg :width :initform 1) (height :initarg :height :initform 1)))
+\end{lispcode}
+\end{examplebox}
+
+\begin{examplebox}[title=Change-class para migración]
+\begin{lispcode}
+(defclass point-2d () ((x :initarg :x) (y :initarg :y)))
+(defclass point-3d (point-2d) ((z :initarg :z :initform 0)))
+(let ((p (make-instance 'point-2d :x 1 :y 2)))
+  (change-class p 'point-3d)
+  (list (px p) (py p) (pz p)))
+\end{lispcode}
+\end{examplebox}
+

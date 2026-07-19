@@ -1,0 +1,28 @@
+\chapter{Seguridad y Sandboxing}
+\label{chap:security}
+{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$} Experto
+
+\section{Amenazas}
+\texttt{py:run} ejecuta código Python arbitrario.
+
+\section{Validación de Input}
+\begin{lispcode}
+(defun safe-py-run (code)
+  (check-type code string)
+  (py:run code))
+\end{lispcode}
+
+\section{Aislamiento con --venv}
+\begin{verbatim}
+lispy.exe --venv entorno-aislado script.lp
+\end{verbatim}
+
+\section{Restricción de Módulos}
+\begin{lispcode}
+(defvar *modulos-permitidos* '("math" "numpy" "json"))
+(defun safe-import (name)
+  (if (member name *modulos-permitidos* :test #'string=)
+      (py:import name)
+      (error "Módulo no permitido: ~A" name)))
+\end{lispcode}
+

@@ -1,0 +1,128 @@
+\chapter{Listas: La Estructura de Datos Universal}
+\label{chap:lists}
+
+{\huge$\bigstar$} Principiante
+
+En Lisp, las listas son la estructura de datos fundamental. Toda la sintaxis
+del lenguaje se reduce a listas (S-expressions), lo que hace que el código
+sea datos y los datos sean código.
+
+\section{Celdas Cons}
+
+La celda cons es el bloque constructor de las listas:
+
+\begin{lispcode}
+(cons 1 2)  ;; → (1 . 2)  — dotted pair
+\end{lispcode}
+
+Una lista propia es una cadena de celdas cons donde la última apunta a nil:
+
+\begin{lispcode}
+(cons 1 (cons 2 (cons 3 nil)))  ;; → (1 2 3)
+'(1 2 3 4 5)                     ;; notación literal
+(list 1 2 3)                     ;; constructor
+\end{lispcode}
+
+\section{Operaciones de Acceso}
+
+\begin{lispcode}
+(car '(1 2 3))    ;; → 1  (first)
+(cdr '(1 2 3))    ;; → (2 3)  (rest)
+(cadr '(1 2 3))   ;; → 2  (second)
+(caddr '(1 2 3))  ;; → 3  (third)
+(nth 2 '(a b c))  ;; → C
+\end{lispcode}
+
+\section{Operaciones de Construcción}
+
+\begin{lispcode}
+(push 'x lista)          ;; añade x al inicio
+(pop lista)              ;; extrae y retorna el primer elemento
+(pushnew 'x lista)       ;; añade si no existe
+(append '(1 2) '(3 4))   ;; → (1 2 3 4)
+(list* 1 2 '(3 4))       ;; → (1 2 3 4)
+(make-list 5 :initial-element 0)  ;; → (0 0 0 0 0)
+\end{lispcode}
+
+\section{Búsqueda en Listas}
+
+\begin{lispcode}
+(member 3 '(1 2 3 4) :test #'=)       ;; → (3 4)
+(find 'c '(a b c d) :test #'eq)       ;; → C
+(position 3 '(1 2 3 4 5))              ;; → 2
+\end{lispcode}
+
+\section{Listas de Asociación (Alists)}
+
+\begin{lispcode}
+(defvar *productos*
+  '((:manzana . 0.50)
+    (:pan . 2.00)
+    (:leche . 1.20)))
+
+(assoc :pan *productos*)   ;; → (:PAN . 2.00)
+(rassoc 1.20 *productos*)  ;; → (:LECHE . 1.20)
+\end{lispcode}
+
+\section{Operaciones de Conjuntos}
+
+\begin{lispcode}
+(adjoin 3 '(1 2 3 4))                ;; → (1 2 3 4) (sin duplicados)
+(union '(1 2 3) '(2 3 4))            ;; → (1 2 3 4)
+(intersection '(1 2 3) '(2 3 4))     ;; → (2 3)
+(set-difference '(1 2 3) '(2 3 4))   ;; → (1)
+\end{lispcode}
+
+\section{Ejemplos}
+
+\begin{examplebox}[title=Construcción incremental con push/pop]
+\begin{lispcode}
+(defvar *pila* nil)
+(push 10 *pila*)     ;; → (10)
+(push 20 *pila*)     ;; → (20 10)
+(pop *pila*)         ;; → 20, *pila* → (10)
+(pop *pila*)         ;; → 10, *pila* → nil
+\end{lispcode}
+\end{examplebox}
+
+\begin{examplebox}[title=Base de datos de productos con alists]
+\begin{lispcode}
+(defvar *db*
+  '((:producto-1 :nombre "Laptop" :precio 1200)
+    (:producto-2 :nombre "Mouse"  :precio 25)))
+
+(defun buscar-precio (id)
+  (let ((entry (assoc id *db*)))
+    (when entry
+      (getf (cdr entry) :precio))))
+
+(buscar-precio :producto-1)  ;; → 1200
+\end{lispcode}
+\end{examplebox}
+
+\begin{examplebox}[title=Aplanamiento recursivo]
+\begin{lispcode}
+(defun flatten (lst)
+  (if (null lst)
+      nil
+      (if (listp (car lst))
+          (append (flatten (car lst))
+                  (flatten (cdr lst)))
+          (cons (car lst) (flatten (cdr lst))))))
+
+(flatten '((1 2) (3 (4 5)) 6))  ;; → (1 2 3 4 5 6)
+\end{lispcode}
+\end{examplebox}
+
+\begin{examplebox}[title=Zip de dos listas]
+\begin{lispcode}
+(defun zip (a b)
+  (if (or (null a) (null b))
+      nil
+      (cons (cons (car a) (car b))
+            (zip (cdr a) (cdr b)))))
+
+(zip '(1 2 3) '(a b c))  ;; → ((1 . A) (2 . B) (3 . C))
+\end{lispcode}
+\end{examplebox}
+

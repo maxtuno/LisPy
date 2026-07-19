@@ -1,0 +1,42 @@
+\chapter{Iteración Avanzada y LOOP}
+\label{chap:loop-advanced}
+{\huge$\bigstar$}{\huge$\bigstar$} Intermedio
+
+\section{Recorrido de Secuencias}
+\begin{lispcode}
+(loop for x in '(1 2 3 4 5) collect x)
+(loop for x across \#(1 2 3) collect x)
+\end{lispcode}
+
+\section{Rangos Numéricos}
+\begin{lispcode}
+(loop for i from 1 to 5 collect i)
+(loop for i from 1 below 5 collect i)
+(loop for i from 1 to 10 by 2 collect i)
+\end{lispcode}
+
+\section{Acumulación}
+\begin{lispcode}
+(loop for x in '(3 1 4 1 5) sum x)
+(loop for x in '(3 1 4 1 5) maximize x)
+\end{lispcode}
+
+\section{Condicionales en LOOP}
+\begin{lispcode}
+(loop for x in '(1 2 3 4 5 6) when (evenp x) collect (* x x))
+\end{lispcode}
+
+\begin{examplebox}[title=Fibonacci con = y then]
+\begin{lispcode}
+(loop for a = 1 then b for b = 1 then (+ a b) repeat 10 collect a)
+\end{lispcode}
+\end{examplebox}
+
+\begin{examplebox}[title=LOOP named con return-from]
+\begin{lispcode}
+(defun primer-par-mayor-que (n lista)
+  (loop named search for x in lista
+        when (and (> x n) (evenp x)) do (return-from search x)))
+\end{lispcode}
+\end{examplebox}
+

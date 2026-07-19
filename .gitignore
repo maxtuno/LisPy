@@ -1,0 +1,51 @@
+# Build output
+build/
+bin/
+
+# IDE
+.vs/
+.vscode/
+*.user
+*.suo
+*.sln
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+*.egg
+venv/
+.venv/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints/
+
+# Node (VS Code extension)
+lp-language/node_modules/
+lp-language/out/
+lp-language/*.vsix
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# LaTeX artifacts
+docs/LisPy-Handbook/*.aux
+docs/LisPy-Handbook/*.log
+docs/LisPy-Handbook/*.out
+docs/LisPy-Handbook/*.toc
+docs/LisPy-Handbook/*.lof
+docs/LisPy-Handbook/*.lot
+docs/LisPy-Handbook/*.idx
+docs/LisPy-Handbook/*.ind
+docs/LisPy-Handbook/*.ilg
+docs/LisPy-Handbook/*.pdf
+
+# Kilo (optional, if used)
+.kilo/
+kilo.json
+AGENTS.md

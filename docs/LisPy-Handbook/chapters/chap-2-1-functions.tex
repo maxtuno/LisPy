@@ -1,0 +1,59 @@
+\chapter{Funciones y Ámbitos}
+\label{chap:functions}
+{\huge$\bigstar$}{\huge$\bigstar$} Intermedio
+
+\section{Definición de Funciones}
+\begin{lispcode}
+(defun cuadrado (x) (* x x))
+\end{lispcode}
+
+\section{Parámetros}
+\begin{lispcode}
+(defun saludar (nombre &optional (saludo "Hola"))
+  (format t "~A, ~A~%" saludo nombre))
+(defun suma (&rest numeros) (reduce #'+ numeros))
+(defun crear-punto (&key (x 0) (y 0)) (cons x y))
+\end{lispcode}
+
+\section{Funciones Anónimas}
+\begin{lispcode}
+(lambda (x) (* x x))
+#'(lambda (x) (* x x))
+\end{lispcode}
+
+\section{Funciones Locales}
+\begin{lispcode}
+(flet ((doble (x) (* x 2)) (triple (x) (* x 3))) (+ (doble 5) (triple 5)))
+(labels ((par? (n) (if (= n 0) t (impar? (1- n))))
+         (impar? (n) (if (= n 0) nil (par? (1- n)))))
+  (par? 4))
+\end{lispcode}
+
+\section{Closures}
+\begin{lispcode}
+(defun make-contador (&optional (inicial 0))
+  (let ((cuenta inicial)) (lambda () (incf cuenta))))
+(defvar *c* (make-contador 10))
+(funcall *c*)
+\end{lispcode}
+
+\section{Múltiples Valores}
+\begin{lispcode}
+(values 10 20 30)
+(multiple-value-bind (a b c) (values 1 2 3) (list a b c))
+\end{lispcode}
+
+\begin{examplebox}[title=Contador con estado encapsulado]
+\begin{lispcode}
+(defun make-acumulador ()
+  (let ((total 0)) (lambda (n) (incf total n))))
+\end{lispcode}
+\end{examplebox}
+
+\begin{examplebox}[title=Divmod con múltiples valores]
+\begin{lispcode}
+(defun divmod (a b) (values (floor a b) (mod a b)))
+(multiple-value-bind (c r) (divmod 17 5) (list c r))
+\end{lispcode}
+\end{examplebox}
+

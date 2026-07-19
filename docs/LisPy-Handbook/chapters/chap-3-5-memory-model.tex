@@ -1,0 +1,32 @@
+\chapter{Modelo de Memoria y GIL}
+\label{chap:memory}
+{\huge$\bigstar$}{\huge$\bigstar$} Intermedio
+
+\section{Estructura de VALUE\_PYTHON}
+
+Cada \texttt{VALUE\_PYTHON} envuelve un \texttt{PyObject*} de CPython.
+Tres campos: \texttt{obj} (puntero), \texttt{callable} (caché),
+\texttt{callable\_known} (flag de caché).
+
+\section{Ownership}
+
+Cada \texttt{VALUE\_PYTHON} posee exactamente una referencia a su
+\texttt{PyObject*}. Al destruirse, llama \texttt{Py\_DECREF}.
+
+\section{GIL}
+
+CPython requiere el GIL. LisPy lo gestiona con macros:
+\begin{verbatim}
+#define PY_GIL_ENSURE()  PyGILState_STATE _py_gil = PyGILState_Ensure()
+#define PY_GIL_RELEASE() PyGILState_Release(_py_gil)
+\end{verbatim}
+
+El GIL se adquiere por llamada, no por ámbito léxico.
+
+\section{Cachés}
+
+\begin{itemize}
+\item \textbf{Módulos:} hash-table \texttt{equal}, persiste toda la vida.
+\item \textbf{Callables:} \texttt{PyCallable\_Check} cacheado.
+\end{itemize}
+

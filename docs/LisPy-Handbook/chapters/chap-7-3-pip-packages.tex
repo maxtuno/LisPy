@@ -1,0 +1,22 @@
+\chapter{Gestión de Paquetes con :pip}
+\label{chap:pip}
+{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$} Experto
+
+\section{Comandos}
+\begin{verbatim}
+LisPy> :pip install numpy
+LisPy> :pip list
+LisPy> :pip show requests
+LisPy> :pip uninstall paquete
+\end{verbatim}
+
+\section{Mecanismo}
+Invocación de \texttt{pip.\_internal.cli.main.main()} con captura de
+stdout/stderr.
+
+\section{Paquetes Pre-instalados}
+pip, setuptools, meson, ninja.
+
+\section{Limitaciones}
+Wheels requieren Python 3.14. Algunos paquetes requieren permisos de admin.
+

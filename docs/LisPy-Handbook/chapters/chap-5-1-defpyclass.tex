@@ -1,0 +1,30 @@
+\chapter{\texttt{defpyclass}: Clases Sincronizadas}
+\label{chap:defpyclass}
+{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$} Experto
+
+\begin{lispcode}
+(load "lib/defpyclass.lp")
+(defpyclass point ((x :initarg :x) (y :initarg :y)) :python-class-name "Point")
+(defvar *p* (make-point :x 3 :y 4))
+\end{lispcode}
+
+\section{Acceso desde Python}
+\begin{lispcode}
+(py:attr (py:instance *p*) "x")
+(py:%set-attr (py:instance *p*) "x" 99)
+\end{lispcode}
+
+Limitaciones: sin métodos Python automáticos, sin herencia cruzada.
+
+\begin{examplebox}[title=Instancia dual]
+\begin{lispcode}
+(defpyclass punto ((x :initarg :x :accessor px) (y :initarg :y :accessor py))
+  :python-class-name "Punto")
+(defvar *p* (make-punto :x 10 :y 20))
+(px *p*)                               ;; → 10 (Lisp)
+(py:attr (py:instance *p*) "x")        ;; → 10 (Python)
+(py:%set-attr (py:instance *p*) "x" 99)
+(px *p*)                               ;; → 99
+\end{lispcode}
+\end{examplebox}
+

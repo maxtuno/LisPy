@@ -1,0 +1,29 @@
+\chapter{Procesador de Imágenes}
+\label{chap:image-processor}
+{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$} Experto
+
+\section{Carga con Pillow}
+\begin{lispcode}
+(py:run "from PIL import Image; import numpy as np
+def load_image(path): return np.array(Image.open(path))
+def save_image(arr, path): Image.fromarray(arr).save(path)")
+\end{lispcode}
+
+\section{Filtros con scipy}
+\begin{lispcode}
+(py:run "from scipy import ndimage; import numpy as np
+def blur(img, sigma=2): return ndimage.gaussian_filter(img, sigma=(sigma,sigma,0))
+def sobel_edge(img):
+    gray = np.mean(img, axis=2) if len(img.shape) == 3 else img
+    return np.abs(ndimage.sobel(gray)).astype(np.uint8)")
+\end{lispcode}
+
+\section{Pipeline con Generadores}
+\begin{lispcode}
+(py:run "def image_pipeline(path):
+    img = np.array(Image.open(path))
+    yield 'original', img.copy()
+    yield 'blurred', blur(img, 3)
+    yield 'edges', sobel_edge(img)")
+\end{lispcode}
+

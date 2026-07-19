@@ -1,0 +1,37 @@
+\chapter{CLOS $\leftrightarrow$ Python: Sincronización Profunda}
+\label{chap:clos-python-sync}
+{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$} Experto
+
+\section{Arquitectura}
+La metaclase \texttt{python-sync-class} extiende \texttt{defclass} para crear
+automáticamente una clase Python equivalente.
+
+\begin{verbatim}
+  defclass Point    class Point(object):
+    slot x    --->    __init__(self, x)
+    slot y            property x, y
+\end{verbatim}
+
+\section{Herencia Cruzada}
+\begin{lispcode}
+(defclass vec3d (vec2d) ((z :initarg :z)) (:metaclass python-sync-class))
+\end{lispcode}
+La clase Lisp genera una clase Python que hereda de la clase Python
+correspondiente.
+
+\begin{examplebox}[title=Mapeo conceptual]
+\begin{lispcode}
+(defclass point ()
+  ((x :initarg :x :accessor point-x)
+   (y :initarg :y :accessor point-y))
+  (:metaclass python-sync-class))
+\end{lispcode}
+Genera en Python:
+\begin{verbatim}
+class Point:
+    def __init__(self, x=None, y=None):
+        self.x = x
+        self.y = y
+\end{verbatim}
+\end{examplebox}
+

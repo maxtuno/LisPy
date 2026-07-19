@@ -1,0 +1,5 @@
+(defun suma-cuadrados (n)
+  (let ((sum 0)) (dotimes (i n) (incf sum (* i i))) sum))
+(time (suma-cuadrados 1000000))
+(compile 'suma-cuadrados)
+(time (suma-cuadrados 1000000))

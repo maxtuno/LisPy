@@ -1,0 +1,25 @@
+\chapter{Embedding y Distribución}
+\label{chap:embedding}
+{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$} Experto
+
+\section{Estructura}
+\begin{verbatim}
+LisPy/
+  lispy.exe      # intérprete
+  lispy.c        # código fuente
+  lib/           # librerías Lisp
+  docs/          # documentación
+\end{verbatim}
+
+\section{Linking}
+CPython 3.14 linkeado estáticamente. OpenSSL y zlib también.
+
+\section{Build}
+\begin{verbatim}
+cmake .. -DLISPY_PYTHON=ON -G Ninja && ninja
+cmake .. -DLISPY_PYTHON=OFF && make
+\end{verbatim}
+
+\section{Instalador NSIS}
+Configura el PATH y recursos del sistema.
+

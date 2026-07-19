@@ -1,0 +1,61 @@
+\chapter{Referencia de Errores}
+\label{app:errors}
+
+\section*{Errores del Sistema}
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+\textbf{Símbolo} & \textbf{Tipo} & \textbf{Descripción} \\
+\midrule
+\texttt{division-by-zero} & condición & División por cero \\
+\texttt{simple-error} & condición & Error genérico \\
+\texttt{simple-warning} & condición & Advertencia genérica \\
+\texttt{undefined-function} & condición & Función no definida \\
+\texttt{unbound-variable} & condición & Variable no ligada \\
+\texttt{type-error} & condición & Error de tipo \\
+\texttt{parse-error} & condición & Error de parsing \\
+\texttt{end-of-file} & condición & Fin de archivo inesperado \\
+\texttt{stream-error} & condición & Error de stream \\
+\texttt{file-error} & condición & Error de archivo \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section*{Errores del Puente Python}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Mensaje} & \textbf{Significado} \\
+\midrule
+\texttt{Python: No module named 'X'} & Módulo Python no encontrado \\
+\texttt{not a Python object} & Se esperaba VALUE\_PYTHON \\
+\texttt{cannot convert Lisp type N} & Tipo Lisp no convertible \\
+\texttt{X is not callable} & Objeto no es invocable \\
+\texttt{module 'X' has no attribute 'Y'} & Atributo no existe \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section*{Manejo de Errores}
+
+\begin{lispcode}
+;; Capturar error específico
+(handler-case
+    (expresión-peligrosa)
+  (division-by-zero (c) ...)
+  (error (c) ...))
+
+;; Capturar sin desenrollar
+(handler-bind
+    ((condition-type #'handler-fn))
+  ...)
+
+;; Ignorar errores
+(ignore-errors expresión)
+
+;; Limpieza garantizada
+(unwind-protect cuerpo limpieza)
+\end{lispcode}
+

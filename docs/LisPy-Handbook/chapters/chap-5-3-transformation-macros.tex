@@ -1,0 +1,22 @@
+\chapter{Macros de Transformación Lisp $\to$ Python}
+\label{chap:transformation-macros}
+{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$} Experto
+
+\section{Traducción de Condicionales}
+\begin{lispcode}
+(pythonic (if (> x 0) (print "positivo") (print "no positivo")))
+\end{lispcode}
+
+\section{Traducción de Bucles}
+\begin{lispcode}
+(pythonic (for i in (range 10) (print (* i i))))
+\end{lispcode}
+
+\section{Traducción de Clases}
+\begin{lispcode}
+(pythonic (class Point (object)
+            (def __init__ (self x y) (:= self.x x) (:= self.y y))))
+\end{lispcode}
+
+Limitaciones: no soporta async/await, decoradores complejos, yield from.
+

@@ -1,0 +1,5 @@
+(defgeneric handle-request (req))
+(defmethod handle-request :around (req)
+  (format t "Log: ~A~%" req) (let ((r (call-next-method))) r))
+(defmethod handle-request :before (req) (format t "Validando~%"))
+(defmethod handle-request ((req string)) :ok)

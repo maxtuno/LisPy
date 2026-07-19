@@ -1,0 +1,29 @@
+\chapter{FFI Directa a C con ctypes}
+\label{chap:ffi}
+{\huge$\bigstar$}{\huge$\bigstar$} Intermedio
+
+\section{CTypes}
+\begin{lispcode}
+(let* ((ctypes (py:import "ctypes"))
+       (libc (py:call (py:attr ctypes "CDLL") "msvcrt.dll")))
+  (py:call (py:attr libc "printf") (py:->python "Número: %d\\n") 42))
+\end{lispcode}
+
+\section{Estructuras C}
+\begin{lispcode}
+(py:run "
+import ctypes
+class Point(ctypes.Structure):
+    _fields_ = [('x', ctypes.c_double), ('y', ctypes.c_double)]
+")
+\end{lispcode}
+
+\section{Arrays NumPy sin Copia}
+\begin{lispcode}
+(py:run "
+import numpy as np, ctypes
+arr = np.array([1.0, 2.0, 3.0])
+ptr = arr.ctypes.data_as(ctypes.POINTER(ctypes.c_double))
+")
+\end{lispcode}
+

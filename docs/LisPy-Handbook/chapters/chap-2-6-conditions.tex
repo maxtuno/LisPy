@@ -1,0 +1,42 @@
+\chapter{Sistema de Condiciones y Re-inicios}
+\label{chap:conditions}
+{\huge$\bigstar$}{\huge$\bigstar$} Intermedio
+
+\section{Condicionales Básicos}
+\begin{lispcode}
+(error "Algo salió mal")
+(warn "Esto es una advertencia")
+(cerror "Continuar" "Error no crítico")
+\end{lispcode}
+
+\section{Handler-Case}
+\begin{lispcode}
+(handler-case (/ 1 0)
+  (division-by-zero (c) (format t "Capturado: ~A~%" c) :infinito))
+\end{lispcode}
+
+\section{Handler-Bind}
+\begin{lispcode}
+(handler-bind ((warning #'(lambda (c) (format t "Advertencia~%") (muffle-warning c))))
+  (warn "Alerta"))
+\end{lispcode}
+
+\section{Limpieza Garantizada}
+\begin{lispcode}
+(unwind-protect (progn (abrir-recurso) (procesar)) (cerrar-recurso))
+\end{lispcode}
+
+\section{Condiciones Personalizadas}
+\begin{lispcode}
+(define-condition malformed-input (error) ((input :initarg :input)))
+(error 'malformed-input :input "bad!")
+\end{lispcode}
+
+\begin{examplebox}[title=División segura]
+\begin{lispcode}
+(defun safe-div (a b)
+  (handler-case (values (/ a b) nil)
+    (division-by-zero (c) (values 0 c))))
+\end{lispcode}
+\end{examplebox}
+

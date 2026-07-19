@@ -1,0 +1,132 @@
+\chapter{Átomos y Tipos de Datos Primitivos}
+\label{chap:atoms}
+
+{\huge$\bigstar$} Principiante
+
+Todo valor en LisPy es, en última instancia, un átomo o una celda cons. Este
+capítulo cubre los tipos atómicos fundamentales.
+
+\section{Números Enteros}
+
+Los enteros en LisPy tienen precisión arbitraria (bigints):
+
+\begin{lispcode}
+42
+-7
+123456789012345678901234567890
+\end{lispcode}
+
+No hay desbordamiento: un entero puede tener tantos dígitos como la memoria
+lo permita.
+
+\section{Números Racionales}
+
+Los racionales se escriben como fracción:
+
+\begin{lispcode}
+1/3
+22/7
+\end{lispcode}
+
+Las operaciones aritméticas entre racionales producen resultados exactos:
+
+\begin{lispcode}
+(+ 1/3 1/7 1/11)  ;; → 137/231
+\end{lispcode}
+
+\section{Números Flotantes}
+
+Los flotantes siguen el estándar IEEE 754 de doble precisión:
+
+\begin{lispcode}
+3.14159
+1.0e10
+-0.5
+\end{lispcode}
+
+\section{Números Complejos}
+
+Los números complejos se construyen con la notación \texttt{\#C}:
+
+\begin{lispcode}
+#C(3 4)       ;; 3 + 4i
+#C(1.0 -2.5)  ;; 1.0 - 2.5i
+\end{lispcode}
+
+\section{Caracteres}
+
+Los caracteres se escriben con la sintaxis \texttt{\#\textbackslash}:
+
+\begin{lispcode}
+#\A          ;; la letra A mayúscula
+#\Space      ;; el carácter de espacio
+#\Newline    ;; el carácter de nueva línea
+#\λ          ;; lambda griega (Unicode)
+\end{lispcode}
+
+\section{Strings}
+
+Las cadenas se delimitan con comillas dobles:
+
+\begin{lispcode}
+"Hello"
+"Línea 1~%Línea 2"  ;; ~% inserta un salto de línea
+\end{lispcode}
+
+\section{Símbolos}
+
+Los símbolos son identificadores con nombre. Se escriben con comilla simple
+para evitar su evaluación:
+
+\begin{lispcode}
+'foo                      ;; el símbolo FOO
+'|nombre con espacios|    ;; símbolo con espacios internos
+:keyword                  ;; keyword (símbolo en el paquete KEYWORD)
+\end{lispcode}
+
+\section{Booleanos}
+
+\begin{lispcode}
+t    ;; verdadero
+nil  ;; falso (también la lista vacía)
+\end{lispcode}
+
+En Common Lisp, \texttt{nil} es el único valor falso; cualquier otro valor es
+verdadero en contexto booleano.
+
+\section{Conversión entre Tipos}
+
+\begin{lispcode}
+(float 42)           ;; → 42.0
+(coerce 3/2 'float)  ;; → 1.5
+(numerator 3/2)      ;; → 3
+(denominator 3/2)    ;; → 2
+\end{lispcode}
+
+\section{Ejemplos}
+
+\begin{examplebox}[title=Precisión arbitraria]
+\begin{lispcode}
+;; Fibonacci(100)
+(defun fib (n)
+  (if (< n 2) n
+    (+ (fib (- n 1)) (fib (- n 2)))))
+;; Nota: usar versión iterativa para valores grandes
+\end{lispcode}
+\end{examplebox}
+
+\begin{examplebox}[title=Aritmética exacta con racionales]
+\begin{lispcode}
+(+ 1/3 1/7 1/11)  ;; fracción exacta: 137/231
+(* 1/3 3)         ;; → 1
+\end{lispcode}
+\end{examplebox}
+
+\begin{examplebox}[title=Números complejos]
+\begin{lispcode}
+(* #C(3 4) #C(1 -2))  ;; → #C(11 -2)
+(abs #C(3 4))         ;; → 5.0 (magnitud)
+(phase #C(1 1))       ;; → 0.785398... (fase en radianes)
+\end{lispcode}
+\end{examplebox}
+

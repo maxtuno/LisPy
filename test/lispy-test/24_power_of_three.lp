@@ -1,0 +1,11 @@
+(defun is-power-of-three (n)
+  (when (<= n 0) (return-from is-power-of-three nil))
+  (loop while (and (> n 1) (= (mod n 3) 0))
+        do (setf n (/ n 3)))
+  (= n 1))
+
+(format t "Power of Three:~%")
+(format t "  27 => ~A~%" (is-power-of-three 27))
+(format t "  0 => ~A~%" (is-power-of-three 0))
+(format t "  9 => ~A~%" (is-power-of-three 9))
+(format t "  45 => ~A~%" (is-power-of-three 45))

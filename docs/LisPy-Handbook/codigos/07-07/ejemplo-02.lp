@@ -1,0 +1,5 @@
+(defvar *modulos-permitidos* '("math" "numpy" "json"))
+(defun safe-import (name)
+  (if (member name *modulos-permitidos* :test #'string=)
+      (py:import name)
+      (error "Módulo no permitido: ~A" name)))

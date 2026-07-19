@@ -1,0 +1,22 @@
+;; CL-22: remove-if and remove-if-not
+(defun partition-list (pred lst)
+  (let ((yes '()) (no '()))
+    (dolist (item lst)
+      (if (funcall pred item)
+          (push item yes)
+          (push item no)))
+    (values (reverse yes) (reverse no))))
+
+(defun remove-if-demo ()
+  (let ((nums '(1 2 3 4 5 6 7 8 9 10))
+        (words '("cat" "dog" "elephant" "fox" "giraffe")))
+    (format t "Numbers: ~A~%" nums)
+    (multiple-value-bind (evens odds) (partition-list #'evenp nums)
+      (format t "Remove even (odds): ~A~%" odds)
+      (format t "Keep even (evens): ~A~%" evens))
+    (format t "~%Words: ~A~%" words)
+    (multiple-value-bind (short long) (partition-list (lambda (w) (<= (length w) 3)) words)
+      (format t "Short (len<=3): ~A~%" short)
+      (format t "Long (len>3):  ~A~%" long))))
+
+(remove-if-demo)

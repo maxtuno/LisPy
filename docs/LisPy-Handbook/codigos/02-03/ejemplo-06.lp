@@ -1,0 +1,5 @@
+(defmacro while (test &body body)
+  `(do () ((not ,test)) ,@body))
+(let ((x 5) (result nil))
+  (while (> x 0) (push x result) (decf x))
+  (nreverse result))

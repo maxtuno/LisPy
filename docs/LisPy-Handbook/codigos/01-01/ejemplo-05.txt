@@ -1,0 +1,2 @@
+python -m venv mi_entorno
+lispy.exe --venv mi_entorno

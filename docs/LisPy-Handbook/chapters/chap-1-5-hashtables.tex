@@ -1,0 +1,59 @@
+\chapter{Hash Tables y Diccionarios}
+\label{chap:hashtables}
+{\huge$\bigstar$} Principiante
+
+\section{Creación y Operaciones Básicas}
+\begin{lispcode}
+(defvar *ht* (make-hash-table :test 'equal))
+(setf (gethash "clave" *ht*) "valor")
+(gethash "clave" *ht*)
+(remhash "clave" *ht*)
+(clrhash *ht*)
+\end{lispcode}
+
+\section{Tests de Comparación}
+\paragraph{:test} determine cómo se comparan las claves: \texttt{eq},
+\texttt{eql}, \texttt{equal}, \texttt{equalp}.
+
+\section{Iteración}
+\begin{lispcode}
+(maphash (lambda (k v) (format t "~A → ~A~%" k v)) *ht*)
+(hash-table-count *ht*)
+(hash-table-p *ht*)
+\end{lispcode}
+
+\begin{examplebox}[title=Contador de palabras]
+\begin{lispcode}
+(defun word-count (words)
+  (let ((ht (make-hash-table :test 'equal)))
+    (dolist (w words ht)
+      (incf (gethash w ht 0)))))
+(word-count '("the" "quick" "brown" "fox" "the"))
+\end{lispcode}
+\end{examplebox}
+
+\begin{examplebox}[title=Memoización de Fibonacci]
+\begin{lispcode}
+(defvar *fib-cache* (make-hash-table :test 'eql))
+(defun fib-fast (n)
+  (or (gethash n *fib-cache*)
+      (setf (gethash n *fib-cache*)
+            (if (< n 2) n (+ (fib-fast (- n 1)) (fib-fast (- n 2)))))))
+(fib-fast 100)
+\end{lispcode}
+\end{examplebox}
+
+\begin{examplebox}[title=Two-sum con hash table]
+\begin{lispcode}
+(defun two-sum (nums target)
+  (let ((seen (make-hash-table :test 'eql)))
+    (dotimes (i (length nums))
+      (let ((complement (- target (aref nums i))))
+        (multiple-value-bind (found idx) (gethash complement seen)
+          (when found (return-from two-sum (list idx i)))))
+      (setf (gethash (aref nums i) seen) i))
+    nil))
+(two-sum #(2 7 11 15) 9)
+\end{lispcode}
+\end{examplebox}
+

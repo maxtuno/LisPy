@@ -1,0 +1,3 @@
+#_math:pi           ;; → 3.14159...
+(#_math:sqrt 144)   ;; → 12.0
+#_os:path:join

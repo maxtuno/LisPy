@@ -1,0 +1,237 @@
+% !TEX program = xelatex
+% !TEX encoding = UTF-8 Unicode
+%
+%  LisPy Handbook — The Definitive Guide
+%  Where Common Lisp and Python Become One
+%
+%  Author: Oscar Riveros — 2026
+%  Build:  xelatex main.tex && xelatex main.tex
+%
+
+\documentclass{lispy-book}
+
+\begin{document}
+
+% ---------- front matter ----------
+\frontmatter
+
+\title{%
+  {\Huge\bfseries\color{lispblue} LisPy Handbook}\\[6pt]
+  {\Large\itshape The Definitive Guide}\\[4pt]
+  {\large Where Common Lisp and Python Become One}\\[12pt]
+  \rule{0.5\textwidth}{0.5pt}\\[8pt]
+  {\small\itshape ``It is not Lisp. It is not Python. It is LisPy.''}
+}
+\author{Oscar Riveros}
+\date{2026}
+
+\maketitle
+\thispagestyle{empty}
+
+\clearpage
+
+\vspace*{\fill}
+\begin{center}
+  \small
+  Copyright~\textcopyright~2026 Oscar Riveros\\[6pt]
+  All rights reserved.\\[12pt]
+  \texttt{https://github.com/maxtuno/lispy}
+\end{center}
+\vspace*{\fill}
+
+\clearpage
+
+\tableofcontents
+\clearpage
+
+\listoffigures
+\clearpage
+
+\listoftables
+\clearpage
+
+% ---------- main matter ----------
+\mainmatter
+
+% ========================
+% Part 0 — Preludio
+% ========================
+\part{Preludio}
+\label{part:preludio}
+
+\include{chapters/chap-0-1-manifesto}
+\include{chapters/chap-0-2-howtoread}
+\include{chapters/chap-0-3-roadmap}
+\include{chapters/chap-0-4-dependencies}
+
+% ========================
+% Part I — Fundamentos
+% ========================
+\part{Fundamentos}
+\label{part:fundamentos}
+
+\include{chapters/chap-1-1-installation}
+\include{chapters/chap-1-2-atoms}
+\include{chapters/chap-1-3-lists}
+\include{chapters/chap-1-4-vectors}
+\include{chapters/chap-1-5-hashtables}
+\include{chapters/chap-1-6-control-flow}
+\include{chapters/chap-1-7-iteration-recursion}
+\include{chapters/chap-1-8-io}
+
+% ========================
+% Part II — El Núcleo Lisp
+% ========================
+\part{El Núcleo Lisp}
+\label{part:nuclisp}
+
+\include{chapters/chap-2-1-functions}
+\include{chapters/chap-2-2-symbols-packages}
+\include{chapters/chap-2-3-macros}
+\include{chapters/chap-2-4-clos-basics}
+\include{chapters/chap-2-5-clos-advanced}
+\include{chapters/chap-2-6-conditions}
+\include{chapters/chap-2-7-loop-advanced}
+\include{chapters/chap-2-8-files-streams}
+\include{chapters/chap-2-9-compilation}
+
+% ========================
+% Part III — El Puente Python
+% ========================
+\part{El Puente Python}
+\label{part:puentepy}
+
+\include{chapters/chap-3-1-python-first-steps}
+\include{chapters/chap-3-2-type-conversion}
+\include{chapters/chap-3-3-python-api}
+\include{chapters/chap-3-4-reader-macro-underscore}
+\include{chapters/chap-3-5-memory-model}
+\include{chapters/chap-3-6-cross-debugging}
+\include{chapters/chap-3-7-callbacks}
+\include{chapters/chap-3-8-performance}
+\include{chapters/chap-3-9-ffi}
+
+% ========================
+% Part IV — Programación Híbrida
+% ========================
+\part{Programación Híbrida}
+\label{part:hibrida}
+
+\include{chapters/chap-4-1-python-template}
+\include{chapters/chap-4-2-pythonic-macro}
+\include{chapters/chap-4-3-defpyfun}
+\include{chapters/chap-4-4-numpy-fast}
+\include{chapters/chap-4-5-defnp}
+\include{chapters/chap-4-6-sympy-bridge}
+\include{chapters/chap-4-7-defmath}
+\include{chapters/chap-4-8-persist}
+\include{chapters/chap-4-9-continuations}
+\include{chapters/chap-4-10-import-hooks}
+\include{chapters/chap-4-11-pandas-bridge}
+\include{chapters/chap-4-12-hybrid-syntax}
+
+% ========================
+% Part V — Meta-Programación
+% ========================
+\part{Meta-Programación}
+\label{part:metaprog}
+
+\include{chapters/chap-5-1-defpyclass}
+\include{chapters/chap-5-2-clos-python-sync}
+\include{chapters/chap-5-3-transformation-macros}
+\include{chapters/chap-5-4-quasiquoting-templates}
+\include{chapters/chap-5-5-ast-transformation}
+\include{chapters/chap-5-6-custom-reader-macros}
+\include{chapters/chap-5-7-module-system}
+\include{chapters/chap-5-8-debugging-metaprograms}
+
+% ========================
+% Part VI — Matemáticas Aplicadas
+% ========================
+\part{Matemáticas Aplicadas}
+\label{part:matematicas}
+
+\include{chapters/chap-6-1-workbench-intro}
+\include{chapters/chap-6-2-symbolic-calculus}
+\include{chapters/chap-6-3-linear-algebra}
+\include{chapters/chap-6-4-optimization}
+\include{chapters/chap-6-5-ode-integration}
+\include{chapters/chap-6-6-visualization}
+\include{chapters/chap-6-7-signal-processing}
+\include{chapters/chap-6-8-machine-learning}
+
+% ========================
+% Part VII — Ingeniería de Sistemas
+% ========================
+\part{Ingeniería de Sistemas}
+\label{part:ingenieria}
+
+\include{chapters/chap-7-1-compiler}
+\include{chapters/chap-7-2-cli-environment}
+\include{chapters/chap-7-3-pip-packages}
+\include{chapters/chap-7-4-embedding-distribution}
+\include{chapters/chap-7-5-testing}
+\include{chapters/chap-7-6-ci-release}
+\include{chapters/chap-7-7-security}
+\include{chapters/chap-7-8-jupyter}
+
+% ========================
+% Part VIII — Estudios de Caso
+% ========================
+\part{Estudios de Caso}
+\label{part:casos}
+
+\include{chapters/chap-8-1-robot-dynamics}
+\include{chapters/chap-8-2-trading-engine}
+\include{chapters/chap-8-3-image-processor}
+\include{chapters/chap-8-4-chatbot}
+\include{chapters/chap-8-5-search-engine}
+\include{chapters/chap-8-6-dsl-data-analysis}
+\include{chapters/chap-8-7-migration}
+
+% ========================
+% Part IX — Apéndices
+% ========================
+\appendix
+\part{Apéndices}
+\label{part:appendices}
+
+\include{chapters/appendix-a-quickref}
+\include{chapters/appendix-b-error-reference}
+\include{chapters/appendix-c-type-conversion}
+\include{chapters/appendix-d-builtins}
+\include{chapters/appendix-e-clos-reference}
+\include{chapters/appendix-f-python-api}
+\include{chapters/appendix-g-build-config}
+\include{chapters/appendix-h-bibliography}
+
+% ========================
+% Part X — Librerías lib/
+% ========================
+\part{Librerías \texttt{lib/}}
+\label{part:libs}
+
+\include{chapters/chap-10-library-overview}
+
+% ========================
+% Part XI — Competitive Programming
+% ========================
+\part{Competitive Programming Problems}
+\label{part:cpproblems}
+
+\include{chapters/chap-11-competitive-programming}
+
+% ========================
+% Part XII — Epílogo
+% ========================
+\part{Epílogo}
+\label{part:epilogue}
+
+\include{chapters/chap-0-5-epilogue}
+
+% ---------- back matter ----------
+\backmatter
+
+\printindex
+
+\end{document}

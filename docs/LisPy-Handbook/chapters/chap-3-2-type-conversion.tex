@@ -1,0 +1,50 @@
+\chapter{Conversión de Tipos Lisp $\leftrightarrow$ Python}
+\label{chap:type-conversion}
+{\huge$\bigstar$}{\huge$\bigstar$} Intermedio
+
+\section{Lisp $\rightarrow$ Python}
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+\textbf{Tipo Lisp} & \textbf{Tipo Python} \\
+\midrule
+\texttt{nil} & \texttt{None} \\
+\texttt{t} & \texttt{True} \\
+Entero & \texttt{int} \\
+Flotante & \texttt{float} \\
+String & \texttt{str} \\
+Lista & \texttt{list} \\
+Hash-table & \texttt{dict} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Python $\rightarrow$ Lisp}
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Tipo Python} & \textbf{Tipo Lisp} \\
+\midrule
+\texttt{None} & \texttt{nil} \\
+\texttt{int} & Entero \\
+\texttt{float} & Flotante \\
+\texttt{str} & String \\
+\texttt{list}/\texttt{tuple} & Lista \\
+\texttt{dict} & Hash-table \\
+Callable/class/module & \texttt{VALUE\_PYTHON} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Conversión Explícita}
+\begin{lispcode}
+(py:->lisp (py:->python '(1 2 3)))
+\end{lispcode}
+
+\begin{examplebox}[title=Roundtrip Lisp $\to$ Python $\to$ Lisp]
+\begin{lispcode}
+(let ((original '(a b c)))
+  (equal original (py:->lisp (py:->python original))))
+\end{lispcode}
+\end{examplebox}
+

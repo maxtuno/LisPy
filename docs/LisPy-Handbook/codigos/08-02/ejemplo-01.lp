@@ -1,0 +1,8 @@
+(defclass order ()
+  ((symbol :initarg :symbol :reader order-symbol)
+   (quantity :initarg :quantity :reader order-quantity)
+   (price :initarg :price :reader order-price)
+   (type :initarg :type :reader order-type)))
+(defclass market-order (order) ((type :initform :market)))
+(defclass limit-order (order) ((type :initform :limit)
+                               (limit-price :initarg :limit-price)))

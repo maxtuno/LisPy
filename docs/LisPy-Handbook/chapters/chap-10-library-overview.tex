@@ -1,0 +1,32 @@
+\chapter{Visión General de las Librerías \texttt{lib/}}
+\label{chap:libs}
+{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$} Avanzado
+
+\section{Listado}
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+Librería & Propósito & Requiere Python \\
+\midrule
+python-template.lp & Generación de código Python & -- \\
+defpyfun.lp & Funciones Python con captura & -- \\
+defpyclass.lp & Clases sincronizadas & -- \\
+defmath.lp & Matemáticas híbridas & numpy, sympy \\
+defnp.lp & Despacho automático & numpy \\
+numpy-fast.lp & Aceleración NumPy & numpy \\
+sympy-bridge.lp & Cálculo simbólico & sympy \\
+pandas-bridge.lp & DataFrames & pandas, numpy \\
+import-hooks.lp & Transformación de AST & -- \\
+persist.lp & Checkpoint/restore & pickle \\
+continuations.lp & Corutinas & -- \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Carga}
+\begin{lispcode}
+(load "lib/defmath.lp")
+(load "lib/sympy-bridge.lp")
+(load "lib/numpy-fast.lp")
+\end{lispcode}
+

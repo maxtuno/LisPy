@@ -1,0 +1,41 @@
+\chapter{Cálculo Simbólico con SymPy}
+\label{chap:symbolic-calculus}
+{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$} Experto
+
+\section{Álgebra Simbólica}
+\begin{lispcode}
+(let* ((x (sympy-symbol "x")) (y (sympy-symbol "y"))
+       (expr (sympy-expr '(+ (* (expt x 2) (expt y 3)) (* (sin x) (exp y))))))
+  (sympy-derive expr x)
+  (sympy-derive expr y))
+\end{lispcode}
+
+\section{Series de Taylor}
+\begin{lispcode}
+(py:run "import sympy as sp; x = sp.Symbol('x')
+print(sp.series(sp.sin(x), x, 0, 7))")
+\end{lispcode}
+
+\section{Resolución de Ecuaciones}
+\begin{lispcode}
+(py:run "import sympy as sp; x = sp.Symbol('x')
+print(sp.solve(x**2 + 3*x + 2, x))")
+\end{lispcode}
+
+\begin{examplebox}[title=Derivada de sin(x)*exp(x\texttwosuperior)]
+\begin{lispcode}
+(let* ((x (sympy-symbol "x"))
+       (expr (sympy-expr '(* (sin x) (exp (expt x 2))))))
+  (sympy-derive expr x))
+\end{lispcode}
+\end{examplebox}
+
+\begin{examplebox}[title=Matriz de masa de robot 2-DOF en LaTeX]
+\begin{lispcode}
+(py:run "import sympy as sp
+m1,m2,l1,l2,t2 = sp.symbols('m1 m2 l1 l2 theta2')
+M = sp.Matrix([...])
+print(sp.latex(M))")
+\end{lispcode}
+\end{examplebox}
+

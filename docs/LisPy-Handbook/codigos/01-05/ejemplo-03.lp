@@ -1,0 +1,5 @@
+(defun word-count (words)
+  (let ((ht (make-hash-table :test 'equal)))
+    (dolist (w words ht)
+      (incf (gethash w ht 0)))))
+(word-count '("the" "quick" "brown" "fox" "the"))

@@ -1,0 +1,240 @@
+\chapter{Machine Learning con scikit-learn}
+\label{chap:machine-learning}
+{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$} Experto
+
+El ecosistema Python ofrece las bibliotecas de machine learning más completas
+del mundo. Con LisPy, puedes usar scikit-learn, pandas, y NumPy directamente
+desde Lisp, combinando la expresividad de Lisp con el poder computacional
+de Python.
+
+\section{Clasificación con Random Forest}
+
+El clasificador Random Forest es uno de los algoritmos más versátiles.
+Funciona construyendo múltiples árboles de decisión durante el entrenamiento:
+
+\begin{lispcode}
+(py:run "from sklearn.ensemble import RandomForestClassifier
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, classification_report
+iris = load_iris()
+X_train, X_test, y_train, y_test = train_test_split(
+    iris.data, iris.target, test_size=0.2, random_state=42)
+clf = RandomForestClassifier(n_estimators=100)
+clf.fit(X_train, y_train); y_pred = clf.predict(X_test)
+print('Accuracy:', accuracy_score(y_test, y_pred))
+print(classification_report(y_test, y_pred, target_names=iris.target_names))")
+\end{lispcode}
+
+La salida incluye la precisión (\texttt{accuracy}) y un reporte detallado
+con precisión por clase, exhaustividad (\texttt{recall}), y $F_1$-score.
+
+\section{Pipelines de Preprocesamiento}
+
+Los pipelines permiten encadenar transformaciones y el clasificador final:
+
+\begin{lispcode}
+(py:run "from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+from sklearn.svm import SVC
+from sklearn.datasets import load_digits
+from sklearn.model_selection import train_test_split
+digits = load_digits()
+X_train, X_test, y_train, y_test = train_test_split(
+    digits.data, digits.target, test_size=0.2, random_state=42)
+pipeline = Pipeline([('scaler', StandardScaler()),
+                     ('pca', PCA(n_components=30)),
+                     ('svc', SVC(kernel='rbf'))])
+pipeline.fit(X_train, y_train)
+print('Pipeline score:', pipeline.score(X_test, y_test))")
+\end{lispcode}
+
+\begin{center}
+\begin{tikzpicture}[node distance=2cm, auto]
+  \tikzstyle{block} = [rectangle, draw, fill=lispblue!10,
+    text width=3cm, text centered, rounded corners, minimum height=1cm]
+  \tikzstyle{arrow} = [->, >=stealth]
+
+  \node [block] (data) {Datos crudos};
+  \node [block, right of=data, node distance=3.5cm] (scaler)
+    {Standard\-Scaler};
+  \node [block, right of=scaler, node distance=3.5cm] (pca)
+    {PCA (30 comp.)};
+  \node [block, right of=pca, node distance=3.5cm] (svc)
+    {SVC (RBF)};
+  \node [block, right of=svc, node distance=3.5cm] (pred)
+    {Predicción};
+
+  \draw [arrow] (data) -- (scaler);
+  \draw [arrow] (scaler) -- (pca);
+  \draw [arrow] (pca) -- (svc);
+  \draw [arrow] (svc) -- (pred);
+\end{tikzpicture}
+\end{center}
+
+El pipeline asegura que la estandarización y la reducción de dimensionalidad
+se apliquen de manera consistente en entrenamiento y prueba, evitando
+fugas de datos (\texttt{data leakage}).
+
+\section{Validación Cruzada}
+
+Para una evaluación más robusta, usamos validación cruzada con
+\texttt{cross\_val\_score}:
+
+\begin{lispcode}
+(py:run "from sklearn.model_selection import cross_val_score
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.datasets import load_iris
+iris = load_iris()
+clf = RandomForestClassifier(n_estimators=50)
+scores = cross_val_score(clf, iris.data, iris.target, cv=5)
+print('Scores:', scores)
+print('Mean:', scores.mean(), '+/-', scores.std() * 2)")
+\end{lispcode}
+
+\section{Clustering K-Means}
+
+El clustering no supervisado permite descubrir grupos en datos no etiquetados:
+
+\begin{lispcode}
+(py:run "from sklearn.cluster import KMeans
+from sklearn.datasets import make_blobs
+import matplotlib.pyplot as plt
+X, y_true = make_blobs(n_samples=300, centers=4,
+                       cluster_std=0.6, random_state=42)
+kmeans = KMeans(n_clusters=4, random_state=42)
+y_kmeans = kmeans.fit_predict(X)
+plt.scatter(X[:,0], X[:,1], c=y_kmeans, cmap='viridis')
+plt.scatter(kmeans.cluster_centers_[:,0],
+            kmeans.cluster_centers_[:,1],
+            marker='x', s=200, linewidths=3, color='red')
+plt.title('K-Means Clustering (k=4)')
+plt.savefig('kmeans.png')")
+\end{lispcode}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.85\textwidth,
+  height=7cm,
+  xlabel={Característica 1},
+  ylabel={Característica 2},
+  title={K-Means: 4 clusters},
+  grid=both,
+  only marks,
+  mark size=1.5,
+  scatter,
+  point meta=y,
+]
+\addplot[scatter, color=lispblue] table {
+0.5 0.5 0
+0.6 0.7 0
+1.2 1.1 0
+4.5 4.3 1
+4.7 4.0 1
+5.0 4.5 1
+8.1 0.2 2
+7.9 0.5 2
+8.5 0.0 2
+2.0 7.5 3
+2.3 7.8 3
+1.8 8.0 3
+};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\section{Regresión Lineal}
+
+Para problemas de regresión, scikit-learn ofrece modelos lineales y
+regularizados:
+
+\begin{lispcode}
+(py:run "from sklearn.linear_model import LinearRegression
+from sklearn.datasets import make_regression
+from sklearn.metrics import mean_squared_error, r2_score
+import numpy as np
+X, y = make_regression(n_samples=100, n_features=1, noise=10,
+                       random_state=42)
+X_train, X_test = X[:80], X[80:]
+y_train, y_test = y[:80], y[80:]
+lr = LinearRegression(); lr.fit(X_train, y_train)
+y_pred = lr.predict(X_test)
+print('MSE:', mean_squared_error(y_test, y_pred))
+print('R2:', r2_score(y_test, y_pred))
+print('Coef:', lr.coef_[0], 'Intercept:', lr.intercept_)")
+\end{lispcode}
+
+\section{Búsqueda de Hiperparámetros}
+
+Optimización sistemática con GridSearchCV:
+
+\begin{lispcode}
+(py:run "from sklearn.model_selection import GridSearchCV
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.datasets import load_iris
+iris = load_iris()
+param_grid = {'n_estimators': [50, 100, 200],
+              'max_depth': [3, 5, None]}
+grid = GridSearchCV(RandomForestClassifier(random_state=42),
+                    param_grid, cv=5, scoring='accuracy')
+grid.fit(iris.data, iris.target)
+print('Best params:', grid.best_params_)
+print('Best score:', grid.best_score_)")
+\end{lispcode}
+
+\section{Datos Tabulares con pandas}
+
+Los datos del mundo real rara vez llegan en el formato exacto que necesita
+un modelo. pandas proporciona las herramientas para cargar, limpiar y
+transformar datos:
+
+\begin{lispcode}
+(py:run "import pandas as pd; from sklearn.ensemble import RandomForestRegressor
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_absolute_error
+df = pd.read_csv('datos.csv')
+X = df.drop('target', axis=1); y = df['target']
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+model = RandomForestRegressor(n_estimators=100)
+model.fit(X_train, y_train)
+preds = model.predict(X_test)
+print('MAE:', mean_absolute_error(y_test, preds))")
+\end{lispcode}
+
+\section{Exportación de Modelos}
+
+Los modelos entrenados se pueden serializar con pickle para uso posterior:
+
+\begin{lispcode}
+(py:run "import pickle; import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.datasets import load_iris
+iris = load_iris(); clf = RandomForestClassifier()
+clf.fit(iris.data, iris.target)
+with open('model.pkl', 'wb') as f: pickle.dump(clf, f)
+with open('model.pkl', 'rb') as f:
+    loaded = pickle.load(f)
+print('Loaded model score:', loaded.score(iris.data, iris.target))")
+\end{lispcode}
+
+\section{Resumen de Flujo de Trabajo}
+
+El flujo típico de un proyecto de machine learning con LisPy sigue estos
+pasos:
+
+\begin{enumerate}
+\item \textbf{Carga de datos}: pandas (CSV, JSON, SQL, Excel) o NumPy
+\item \textbf{Preprocesamiento}: StandardScaler, LabelEncoder, PCA, selección de características
+\item \textbf{División}: train\_test\_split con estratificación
+\item \textbf{Modelado}: RandomForest, SVC, KMeans, LinearRegression, etc.
+\item \textbf{Evaluación}: cross\_val\_score, métricas (accuracy, MSE, $F_1$)
+\item \textbf{Optimización}: GridSearchCV, RandomizedSearchCV
+\item \textbf{Despliegue}: pickle, ONNX, o integración en pipeline Lisp
+\end{enumerate}
+
+Cada uno de estos pasos puede ser orquestado desde Lisp, permitiendo
+generar pipelines de ML de manera programática con macros y metaprogramación.
+
+\endinput

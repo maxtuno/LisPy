@@ -1,0 +1,30 @@
+\chapter{Depuración de Meta-Programas}
+\label{chap:debugging-metaprograms}
+{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$} Experto
+
+\section{Macroexpand}
+\begin{lispcode}
+(macroexpand-1 '(cuadrado (+ 2 3)))
+(macroexpand '(cuadrado (+ 2 3)))
+\end{lispcode}
+
+\section{Trace}
+\begin{lispcode}
+(trace mi-funcion) (untrace mi-funcion)
+\end{lispcode}
+
+\section{Inspección de Código Generado}
+\begin{lispcode}
+(let ((code (write-python-template `(def ,'test (x) "return x ** 2"))))
+  (format t "Python:~%~A~%" code) (py:run code))
+\end{lispcode}
+
+\begin{examplebox}[title=Macroexpand-1 de defmath]
+\begin{lispcode}
+(macroexpand-1 '(defmath sq (x) (* x x)))
+;; Expande a:
+;; (progn (defun sq ...) (defun sq-sym ...) (defun sq-num ...)
+;;        (defparameter *sq-meta* ...))
+\end{lispcode}
+\end{examplebox}
+

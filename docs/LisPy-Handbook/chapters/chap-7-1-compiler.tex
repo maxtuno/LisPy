@@ -1,0 +1,31 @@
+\chapter{El Compilador FASL}
+\label{chap:compiler}
+{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$} Experto
+
+\section{Formato FASL}
+Bytecode binario para carga rápida.
+
+\begin{verbatim}
+lispy.exe -c programa.lp    # genera programa.fasl
+lispy.exe programa.fasl
+\end{verbatim}
+
+\section{Compilación de Funciones}
+\begin{lispcode}
+(defun fib (n) (if (< n 2) n (+ (fib (- n 1)) (fib (- n 2)))))
+(compile 'fib)
+(time (fib 30))
+\end{lispcode}
+
+\section{Disassemble}
+\begin{lispcode}
+(disassemble 'fib)
+\end{lispcode}
+
+\section{Modos de Ejecución}
+\begin{enumerate}
+\item Script: \texttt{lispy.exe script.lp}
+\item Compilado: \texttt{lispy.exe prog.fasl}
+\item REPL: \texttt{lispy.exe --repl}
+\end{enumerate}
+

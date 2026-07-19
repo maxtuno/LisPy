@@ -1,0 +1,32 @@
+\chapter{\texttt{import-hooks.lp}: Transformación de AST}
+\label{chap:import-hooks}
+{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$} Avanzado
+
+\section{Instalación}
+\begin{lispcode}
+(load "lib/import-hooks.lp")
+(py:register-ast-hook
+  (lambda (module-name ast)
+    (format t "Transformando: ~A~%" module-name) ast))
+\end{lispcode}
+
+\section{Estructura del AST}
+Cada nodo es una lista: \texttt{[ClassName, [[field, value], ...]]}.
+
+\section{Desactivar}
+\begin{lispcode}
+(py:remove-ast-hook)
+\end{lispcode}
+
+\begin{examplebox}[title=Hook que registra nombres de funciones]
+\begin{lispcode}
+(py:register-ast-hook
+  (lambda (module-name ast)
+    (walk-ast ast
+      (lambda (node)
+        (when (and (listp node) (eq (car node) 'FunctionDef))
+          (format t "  → ~A~%" (cadr node)))))
+    ast))
+\end{lispcode}
+\end{examplebox}
+

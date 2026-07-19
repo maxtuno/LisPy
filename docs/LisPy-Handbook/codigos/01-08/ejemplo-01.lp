@@ -1,0 +1,7 @@
+(format t "~A~%" "Hola")
+(format nil "~A + ~A = ~A" 1 2 3)
+(format nil "~D" 42)
+(format nil "~B" 42)
+(format nil "~X" 255)
+(format nil "~5,2F" 3.14159)
+(format nil "~@R" 42)

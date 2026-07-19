@@ -1,0 +1,112 @@
+\chapter{API Completa del Puente Python}
+\label{app:python-api}
+
+\section*{Funciones de Importación y Llamada}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Función} & \textbf{Descripción} \\
+\midrule
+\texttt{py:import name} & Importa módulo Python \\
+\texttt{py:call fn \&rest args} & Llama función Python \\
+\texttt{py:call-kw fn kwargs \&rest args} & Llama con kwargs \\
+\texttt{py:run code} & Ejecuta código Python \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section*{Acceso y Mutación}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Función} & \textbf{Descripción} \\
+\midrule
+\texttt{py:attr obj name} & Obtiene atributo \\
+\texttt{py:getitem obj key} & Indexación obj[key] \\
+\texttt{py:\%set-attr obj name value} & Asigna atributo \\
+\texttt{py:\%set-item obj key value} & Asigna índice \\
+\texttt{py:\%chain \&rest chain} & Encadena atributos \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section*{Conversión}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Función} & \textbf{Descripción} \\
+\midrule
+\texttt{py:->python value} & Lisp → Python \\
+\texttt{py:->lisp python-obj} & Python → Lisp \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section*{Inspección}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Función} & \textbf{Descripción} \\
+\midrule
+\texttt{py:type obj} & type(obj) \\
+\texttt{py:dir obj} & dir(obj) \\
+\texttt{py:repr obj} & repr(obj) \\
+\texttt{py:str obj} & str(obj) \\
+\texttt{py:len obj} & len(obj) \\
+\texttt{py:help obj} & help(obj) \\
+\texttt{py:python? obj} & ¿es VALUE\_PYTHON? \\
+\texttt{py:callable? obj} & ¿es callable? \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section*{Iteración y Generadores}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Función} & \textbf{Descripción} \\
+\midrule
+\texttt{py:iter obj} & Crea iterador \\
+\texttt{py:next iterator} & Siguiente elemento \\
+\texttt{py:gen-next generator} & next(gen, None) \\
+\texttt{py:gen-send generator value} & gen.send(value) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section*{Depuración}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Función} & \textbf{Descripción} \\
+\midrule
+\texttt{py:last-traceback} & Último traceback \\
+\texttt{py:frame-locals frame} & Locales del frame \\
+\texttt{py:frame-globals frame} & Globales del frame \\
+\texttt{py:frame-eval expr frame} & Evalúa en frame \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section*{Serialización y Callbacks}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Función} & \textbf{Descripción} \\
+\midrule
+\texttt{py:pickle-dumps obj} & Serializa con pickle \\
+\texttt{py:pickle-loads string} & Deserializa pickle \\
+\texttt{py:register-callback sym} & Callback Lisp→Python \\
+\texttt{py:save-session filename} & Checkpoint \\
+\texttt{py:load-session filename} & Restore \\
+\bottomrule
+\end{tabular}
+\end{center}
+

@@ -1,0 +1,12 @@
+{
+  "argv": [
+    "python",
+    "-m",
+    "lisPy_kernel",
+    "-f",
+    "{connection_file}"
+  ],
+  "display_name": "LisPy (Common Lisp + Python)",
+  "language": "lp",
+  "interrupt_mode": "signal"
+}

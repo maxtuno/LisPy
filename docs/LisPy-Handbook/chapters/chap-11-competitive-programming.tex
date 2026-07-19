@@ -1,0 +1,398 @@
+\chapter{Competitive Programming Problems}
+\label{chap:cpproblems}
+{\huge$\bigstar$} a {\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$}
+
+\section{Organización}
+
+El repositorio de LisPy incluye 120 problemas de programación competitiva
+en \texttt{docs/problems/problem\_XXX.lp}. Cada archivo es un programa
+LisPy autoejecutable. En conjunto forman una suite de regresión que verifica
+el funcionamiento correcto del intérprete.
+
+Para ejecutar todos los problemas:
+
+\begin{lstlisting}[style=python,title=Terminal]
+for %f in (docs/problems/problem_*.lp) do bin\lispy.exe %f
+\end{lstlisting}
+
+\section{Catálogo Completo}
+
+\begin{center}
+\footnotesize
+\begin{tabular}{clll}
+\toprule
+Problema & Categoría & Dificultad & Archivo \\
+\midrule
+001--009 & Aritmética y números & Principiante & problem\_001.lp \\
+010--018 & Listas y cons cells & Principiante & problem\_010.lp \\
+019--025 & Secuencias y vectores & Intermedio & problem\_019.lp \\
+026--032 & Strings y caracteres & Intermedio & problem\_026.lp \\
+033--038 & Hash tables y conjuntos & Intermedio & problem\_033.lp \\
+039--047 & Macros y metaprogramación & Avanzado & problem\_039.lp \\
+048--055 & CLOS y POO & Avanzado & problem\_048.lp \\
+056--062 & Sistema de condiciones & Intermedio & problem\_056.lp \\
+063--070 & Iteración y control & Intermedio & problem\_063.lp \\
+071--076 & Archivos y streams & Intermedio & problem\_071.lp \\
+077--085 & Python FFI bridge & Avanzado & problem\_077.lp \\
+086--090 & Paquetes y símbolos & Avanzado & problem\_086.lp \\
+091--095 & Compilación y rendimiento & Experto & problem\_091.lp \\
+096--100 & Misceláneos & Experto & problem\_096.lp \\
+101 & Disjoint Set Union (DSU) & Experto & \texttt{problem\_101.lp} \\
+102 & Pipeline middleware & Experto & \texttt{problem\_102.lp} \\
+103 & Convex Hull (Graham Scan) & Experto & \texttt{problem\_103.lp} \\
+104 & Weighted Task Scheduler & Experto & \texttt{problem\_104.lp} \\
+105 & BUG-013 verification & Experto & \texttt{problem\_105.lp} \\
+106 & Stack machine VM & Experto & \texttt{problem\_106.lp} \\
+107 & Analytics engine & Experto & \texttt{problem\_107.lp} \\
+108 & Delegating calculator & Experto & \texttt{problem\_108.lp} \\
+109 & Cryptographic audit & Experto & \texttt{problem\_109.lp} \\
+110 & Reinitialization bridge & Experto & \texttt{problem\_110.lp} \\
+111 & Expression evaluator & Experto & \texttt{problem\_111.lp} \\
+112 & Trading engine + Números Bouncy & Experto & \texttt{problem\_112.lp} \\
+113 & Property graph engine & Experto & \texttt{problem\_113.lp} \\
+114 & Introspection engine & Experto & \texttt{problem\_114.lp} \\
+115 & List ops + reader macros & Experto & \texttt{problem\_115.lp} \\
+116 & Reader macro DSL & Experto & \texttt{problem\_116.lp} \\
+117 & CLOS MOP deep probe & Experto & \texttt{problem\_117.lp} \\
+118 & Stream composition & Experto & \texttt{problem\_118.lp} \\
+119 & Dynamic method protocol & Experto & \texttt{problem\_119.lp} \\
+120 & Stdlib audit \& precision & Experto & \texttt{problem\_120.lp} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Problemas Destacados}
+
+\subsection*{001: Precisión Racional}
+
+Aritmética exacta con números racionales:
+
+\begin{lispcode}
+(print (+ 1/3 1/7))
+\end{lispcode}
+
+Salida: \texttt{10/21}
+
+\subsection*{002: Fibonacci con Big Integers}
+
+Secuencia de Fibonacci con precisión arbitraria:
+
+\begin{lispcode}
+(defun fib (n)
+  (if (<= n 1) n
+      (+ (fib (- n 1)) (fib (- n 2)))))
+(print (fib 100))
+\end{lispcode}
+
+Salida: \texttt{354224848179261915075}
+
+\subsection*{007: Máximo Común Divisor}
+
+\begin{lispcode}
+(print (gcd 123456789 987654321))
+\end{lispcode}
+
+Salida: \texttt{9}
+
+\subsection*{034: Two-Sum}
+
+Búsqueda de pares con hash table:
+
+\begin{lispcode}
+(defun two-sum (nums target)
+  (let ((seen (make-hash-table)))
+    (loop for n in nums for i from 0 do
+      (let ((complement (- target n)))
+        (multiple-value-bind (val found) (gethash complement seen)
+          (if found (return (list val i))
+              (setf (gethash n seen) i)))))))
+(print (two-sum '(2 7 11 15) 9))
+\end{lispcode}
+
+Salida: \texttt{(0 1)}
+
+\subsection*{048: Jerarquía de Figuras (CLOS)}
+
+Herencia y métodos genéricos:
+
+\begin{lispcode}
+(defclass shape () ((color :initarg :color :accessor shape-color)))
+(defclass circle (shape) ((radius :initarg :radius :accessor circle-radius)))
+(defclass rectangle (shape) ((width :initarg :width :accessor rect-width)
+                             (height :initarg :height :accessor rect-height)))
+(defgeneric area (shape))
+(defmethod area ((c circle))
+  (* 3.141592653589793 (expt (circle-radius c) 2)))
+(defmethod area ((r rectangle))
+  (* (rect-width r) (rect-height r)))
+(let ((c (make-instance 'circle :color "red" :radius 5)))
+  (print (area c)))
+\end{lispcode}
+
+Salida: \texttt{78.53981633974483}
+
+\subsection*{050: Especializadores EQL}
+
+\textcolor{lisppygreen}{$\checkmark$} Corregido desde BUG-001
+
+\begin{lispcode}
+(defgeneric tax-rate (country))
+(defmethod tax-rate ((country (eql :us))) 0.15)
+(defmethod tax-rate ((country (eql :uk))) 0.20)
+(defmethod tax-rate (country) 0.25)
+(print (tax-rate :us))
+\end{lispcode}
+
+Salida: \texttt{0.15}
+
+\subsection*{077: Python math.sqrt desde Lisp}
+
+\begin{lispcode}
+(let ((math (py:import "math")))
+  (print (py:call (py:attr math "sqrt") 2)))
+\end{lispcode}
+
+Salida: \texttt{1.4142135623730951}
+
+\subsection*{101: Disjoint Set Union (DSU)}
+
+Implementación completa de union-find con path compression y union by rank:
+
+\begin{lispcode}
+(defclass dsu ()
+  ((parent :accessor dsu-parent :initform nil)
+   (rank   :accessor dsu-rank   :initform nil)
+   (size   :accessor dsu-size   :initarg :size :initform 0)
+   (count  :accessor dsu-count  :initform 0)))
+
+(defun make-dsu (n)
+  (let ((d (make-instance 'dsu :size n)))
+    (setf (dsu-parent d) (make-array n :initial-element 0))
+    (setf (dsu-rank d)   (make-array n :initial-element 0))
+    (setf (dsu-count d)  n)
+    (loop for i from 0 to (1- n) do
+      (setf (aref (dsu-parent d) i) i))
+    d))
+
+(defmethod find ((d dsu) x)
+  (let ((parent (dsu-parent d))
+        (px (aref (dsu-parent d) x)))
+    (if (/= px x)
+        (setf (aref parent x) (find d px))
+        x)))
+
+(defmethod union ((d dsu) a b)
+  (let* ((ra (find d a))
+         (rb (find d b)))
+    (if (= ra rb) nil
+        (let ((parent (dsu-parent d))
+              (rank (dsu-rank d)))
+          (let ((ra-rank (aref rank ra))
+                (rb-rank (aref rank rb)))
+            (if (< ra-rank rb-rank)
+                (setf (aref parent ra) rb)
+                (if (> ra-rank rb-rank)
+                    (setf (aref parent rb) ra)
+                    (progn
+                      (setf (aref parent rb) ra)
+                      (setf (aref rank ra) (1+ (aref rank ra))))))
+            (setf (dsu-count d) (1- (dsu-count d))) t)))))
+\end{lispcode}
+
+\subsection*{103: Convex Hull (Graham Scan)}
+
+Algoritmo de geometría computacional para encontrar la envolvente convexa
+de un conjunto de puntos:
+
+\begin{lispcode}
+(defclass point ()
+  ((x :initarg :x :reader point-x)
+   (y :initarg :y :reader point-y)))
+
+(defun cross-product (a b c)
+  (- (* (- (point-x b) (point-x a))
+        (- (point-y c) (point-y a)))
+     (* (- (point-y b) (point-y a))
+        (- (point-x c) (point-x a)))))
+
+(defun graham-scan (points-vec)
+  (let* ((n (length points-vec))
+         (pivot (find-pivot points-vec))
+         (sorted (sort (copy-seq points-vec) ...))
+         (hull (make-array n)) (hsize 0))
+    ;; Construcción del hull con cross-product
+    hull))
+\end{lispcode}
+
+\subsection*{106: Stack Machine Virtual}
+
+Una máquina virtual completa con opcodes aritméticos, Python FFI para
+funciones trascendentes, y CLOS como base:
+
+\begin{lispcode}
+(defclass vm ()
+  ((stack :accessor vm-stack
+          :initform (make-array 16 :fill-pointer 0 :adjustable t))
+   (memory :accessor vm-memory :initform (make-hash-table :test 'equal))
+   (program :accessor vm-program :initarg :program)
+   (pc :accessor vm-pc :initform 0)
+   (exec-count :accessor vm-exec-count :initform 0 :allocation :class)))
+\end{lispcode}
+
+\subsection*{108: call-next-method con Argumentos}
+
+Este problema verificó la corrección de \texttt{BUG-023}, donde
+\texttt{call-next-method} ignoraba los argumentos explícitos:
+
+\begin{lispcode}
+(defclass doubler (processor) ())
+(defmethod compute ((p doubler) x)
+  (call-next-method p (* x 2)))  ;; ahora funciona correctamente
+\end{lispcode}
+
+\subsection*{112: Números Bouncy (Project Euler)}
+
+Un número es \textit{bouncy} si sus dígitos no son ni estrictamente
+crecientes ni estrictamente decrecientes:
+
+\begin{lispcode}
+(defun bouncy-p (n)
+  (let* ((s (format nil "~D" n)) (inc nil) (dec nil))
+    (loop for i from 1 below (length s)
+          do (when (char> (char s i) (char s (1- i))) (setf inc t))
+             (when (char< (char s i) (char s (1- i))) (setf dec t)))
+    (and inc dec)))
+
+(defun euler-112 ()
+  (let ((n 99) (bouncy 0))
+    (loop while (/= (* bouncy 100) (* 99 n))
+          do (incf n) (when (bouncy-p n) (incf bouncy)))
+    n))
+\end{lispcode}
+
+\subsection*{113: Grafo con Herencia Múltiple}
+
+Un grafo de propiedades implementado con herencia múltiple en CLOS,
+listas de propiedades de símbolos, y Dijkstra:
+
+\begin{lispcode}
+(defclass property-node ()
+  ((name :initarg :name :accessor pn-name :initform 'unnamed)
+   (plist :initarg :plist :accessor pn-plist :initform nil)))
+
+(defclass linked-node (property-node) ())
+(defclass weighted-node (property-node) ())
+(defclass composite-node (linked-node weighted-node) ())
+\end{lispcode}
+
+\subsection*{114: Metaprogramación e Introspección}
+
+Class-of, type-of, subtypep, format condicional, equalp, coerce,
+call-next-method en :before, array-rank, find-class, defstruct:
+
+\begin{lispcode}
+(print (class-of 42))     ;; \to clase INTEGER
+(print (type-of "hello")) ;; \to (SIMPLE-BASE-STRING 5)
+(print (subtypep 'integer 'number)) ;; \to T, T
+\end{lispcode}
+
+\subsection*{115: Operaciones de Listas y Reader/Printer}
+
+acons, pairlis, rassoc, tailp, nconc, nreconc, adjoin, subsetp,
+nsubstitute, \texttt{*print-escape*}, \texttt{*print-case*},
+\texttt{*read-base*}, \texttt{copy-readtable}, \texttt{change-class},
+\texttt{allocate-instance}:
+
+\begin{lispcode}
+(let ((alist (acons 'a 1 (acons 'b 2 nil))))
+  (print (assoc 'a alist)))  ;; \to (A . 1)
+
+(let* ((*read-base* 16))
+  (print (read-from-string "FF")))  ;; \to 255
+\end{lispcode}
+
+\subsection*{116: Macros de Lectura Personalizadas}
+
+Extensión del lector con \texttt{set-macro-character},
+\texttt{set-dispatch-macro-character}, \texttt{make-dispatch-macro-character},
+\texttt{read-delimited-list}, \texttt{*read-eval*}, \texttt{*read-suppress*}:
+
+\begin{lispcode}
+(let* ((rt (copy-readtable)))
+  (set-macro-character #\$
+    (lambda (s c) (declare (ignore s c)) :dollar) nil rt)
+  (let ((*readtable* rt))
+    (print (read-from-string "$"))))  ;; \to :DOLLAR
+\end{lispcode}
+
+\subsection*{117: CLOS Metaobject Protocol}
+
+Introspección profunda con class-slots, slot-definition-name,
+generic-function-methods, method-specializers, find-method,
+ensure-generic-function, compute-applicable-methods:
+
+\begin{lispcode}
+(defclass mop-base ((name :initarg :name :accessor mb-name)))
+(let ((slots (class-slots (find-class 'mop-base))))
+  (print (mapcar #'slot-definition-name slots)))
+\end{lispcode}
+
+\subsection*{118: Composición de Streams}
+
+String streams, broadcast, concatenated, echo, two-way, synonym,
+file I/O, restarts, condiciones:
+
+\begin{lispcode}
+(let* ((s1 (make-string-output-stream))
+       (s2 (make-string-output-stream))
+       (b (make-broadcast-stream s1 s2)))
+  (write-string "test" b)
+  (print (list (get-output-stream-string s1)
+               (get-output-stream-string s2))))
+\end{lispcode}
+
+\subsection*{120: Biblioteca Estándar y Precisión}
+
+Auditoría completa de la biblioteca estándar con pruebas de
+\texttt{make-sequence}, \texttt{fill}, \texttt{replace},
+\texttt{map-into}, \texttt{mismatch}, \texttt{stable-sort},
+\texttt{merge}, \texttt{vector-push-extend}, \texttt{adjust-array},
+\texttt{get-universal-time}, \texttt{decode-universal-time},
+\texttt{sleep}, \texttt{defsetf}, \texttt{define-setf-expander},
+\texttt{apropos}, \texttt{probe-file}, \texttt{directory},
+\texttt{delete-file}, y Python decimal de alta precisión.
+
+\section{Uso como Suite de Regresión}
+
+Estos problemas sirven como suite de regresión para el intérprete LisPy.
+Cada archivo \texttt{.lp} es autoejecutable y reporta resultados al
+finalizar. Los problemas 101--120 en particular documentan bugs encontrados
+y corregidos durante el desarrollo:
+
+\begin{center}
+\begin{tabular}{cll}
+\toprule
+Bug & Descripción & Estado \\
+\midrule
+BUG-001 & EQL specializer no dispatcha & Corregido \\
+BUG-013 & :around methods sin call-next-method & Corregido \\
+BUG-015 & :before/:after requieren \allowbreak \texttt{\&allow-other-keys} & Corregido \\
+BUG-016 & initialize-instance :around no dispatcha & Corregido \\
+BUG-017 & with-slots falla en defmethod & Corregido \\
+BUG-018 & handler-case falla en defmethod & Parcial \\
+BUG-020 & multiple-value-bind en defmethod & Corregido \\
+BUG-021 & Racionales a Python no convertibles & Corregido \\
+BUG-022 & defmethod descarta valores múltiples & Corregido \\
+BUG-023 & call-next-method ignora args explícitos & Corregido \\
+BUG-025 & reinitialize-instance resetea slots & Corregido \\
+BUG-026 & py:call chaining con bytes intermedios & Corregido \\
+BUG-027 & shared-initialize no llamado & Corregido \\
+BUG-034 a BUG-045 & 12 bugs de defmethod body & Corregido \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Para más detalles, consulta el archivo \texttt{BUGS.md} en la raíz del
+proyecto.
+
+\endinput

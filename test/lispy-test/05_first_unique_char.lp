@@ -1,0 +1,11 @@
+(defun first-unique-char (s)
+  (block first-unique-char
+    (let* ((Counter (py:attr (py:import "collections") "Counter"))
+           (counts-ht (py:call Counter (py:->python s)))
+           (len (length s)))
+      (dotimes (i len)
+        (let ((ch (string (char s i))))
+          (when (= (gethash ch counts-ht) 1)
+            (return-from first-unique-char i))))
+      -1)))
+(print (first-unique-char "leetcode"))

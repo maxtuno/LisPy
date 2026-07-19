@@ -1,0 +1,88 @@
+\chapter{Instalación y Primeros Pasos}
+\label{chap:installation}
+
+{\huge$\bigstar$} Principiante
+
+\section{Requisitos del Sistema}
+
+LisPy está diseñado para Windows x64. Los requisitos mínimos son:
+
+\begin{itemize}
+\item Sistema operativo: Windows 10 o superior (x64)
+\item Opcional: CPython 3.14 instalado (para soporte completo del puente Python)
+\item Espacio en disco: ~50 MB para la instalación base
+\end{itemize}
+
+\section{Descarga e Instalación}
+
+Descarga el binario \texttt{lispy.exe} desde el repositorio oficial y
+colócalo en un directorio de tu elección. Opcionalmente, añade dicho
+directorio a la variable de entorno \texttt{PATH} para acceso global.
+
+\section{Verificación}
+
+Abre una terminal y ejecuta:
+
+\begin{lispcode}
+lispy.exe --version
+\end{lispcode}
+
+Deberías ver información sobre la versión y configuración del intérprete.
+
+\section{Entornos Virtuales Python}
+
+Si deseas aislar las dependencias Python de tu proyecto:
+
+\begin{lstlisting}[style=python,title=Terminal]
+python -m venv mi_entorno
+lispy.exe --venv mi_entorno
+\end{lstlisting}
+
+\section{Primer Comando}
+
+Inicia el REPL:
+
+\begin{lstlisting}[style=python,title=Terminal]
+lispy.exe --repl
+\end{lstlisting}
+
+En el prompt \texttt{LisPy>}, escribe:
+
+\begin{lispcode}
+(+ 1 2)
+\end{lispcode}
+
+LisPy responderá con \texttt{3}.
+
+\section{El REPL Interactivo}
+
+El REPL de LisPy ofrece los siguientes comandos:
+
+\begin{itemize}
+\item \texttt{:help} -- Muestra la ayuda del REPL
+\item \texttt{:quit} -- Sale del REPL
+\item \texttt{:pip} -- Gestión de paquetes Python
+\item \texttt{:trace} -- Activa/desactiva traza de ejecución
+\end{itemize}
+
+\section{Ejemplos}
+
+\begin{examplebox}
+\begin{lispcode}
+;; hello.lp - Primer programa
+(format t "Hello, LisPy!~%")
+\end{lispcode}
+Salida: \texttt{Hello, LisPy!}
+\end{examplebox}
+
+\begin{examplebox}
+\begin{lispcode}
+;; Uso de --venv con un entorno virtual preexistente
+;; Terminal:
+;;   lispy.exe --venv mi_entorno script.lp
+
+;; Instalación de numpy desde el REPL
+;; LisPy> :pip install numpy
+\end{lispcode}
+\end{examplebox}
+

@@ -1,0 +1,60 @@
+{
+  "name": "lp-language",
+  "displayName": "LP Language (Lisp + Python)",
+  "description": "Syntax highlighting and language support for .lp files mixing Common Lisp and Python. Supports py:run embedded Python, #_ attribute chaining, py:xxx transparent builtins, and standalone Python code.",
+  "version": "0.0.2",
+  "icon": "icon.png",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Snippets"
+  ],
+  "activationEvents": [
+    "onLanguage:lp"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "lp",
+        "aliases": [
+          "LP (Lisp/Python)",
+          "lp"
+        ],
+        "extensions": [
+          ".lp"
+        ],
+        "configuration": "./language-configuration.json",
+        "icon": {
+          "light": "./icon.png",
+          "dark": "./icon.png"
+        }
+      }
+    ],
+    "grammars": [
+      {
+        "language": "lp",
+        "scopeName": "source.lp",
+        "path": "./syntaxes/lp.tmLanguage.json"
+      },
+      {
+        "scopeName": "inline.python.lp",
+        "path": "./syntaxes/python-injection.json",
+        "injectTo": [
+          "source.lp"
+        ]
+      }
+    ],
+    "snippets": [
+      {
+        "language": "lp",
+        "path": "./snippets/lp.json"
+      }
+    ]
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.120.0"
+  }
+}

@@ -1,0 +1,28 @@
+\chapter{Transformación de AST de Python}
+\label{chap:ast-transformation}
+{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$} Experto
+
+\section{Recorrido del AST}
+\begin{lispcode}
+(defun walk-ast (ast fn)
+  (let ((result (funcall fn ast)))
+    (if (listp result)
+        (mapcar (lambda (child)
+                  (if (listp child) (walk-ast child fn) child)) result)
+        result)))
+\end{lispcode}
+
+\section{Inyección de Logging}
+\begin{lispcode}
+(defun inject-logging (ast)
+  (walk-ast ast
+    (lambda (node)
+      (if (and (listp node) (eq (car node) 'FunctionDef))
+          (let* ((n (cadr node)) (b (cadddr node)))
+            `(FunctionDef ,n ,(caddr node)
+              ((Expr (Call (Name "print" Load)
+                         ((Constant ,(format nil ">>> ~A" n))) ()))
+               ,@b) ,@(cddddr node)))
+          node))))
+\end{lispcode}
+

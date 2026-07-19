@@ -1,0 +1,6 @@
+(defmacro def-transformation (name transform-fn)
+  `(defpyfun ,(intern (format nil "~A-PY" name)) (data)
+     ,(format nil "return [~A(x) for x in data]" transform-fn)
+     :as ,(intern (format nil "~A-PY" name))))
+(def-transformation double (* 2))
+(def-transformation square (** 2))

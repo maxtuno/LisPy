@@ -1,0 +1,32 @@
+\chapter{\texttt{defmath.lp}: Matemáticas Híbridas}
+\label{chap:defmath}
+{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$} Avanzado
+
+\section{El Macro defmath}
+\begin{lispcode}
+(defmath distance (x y) (sqrt (+ (expt x 2) (expt y 2))))
+\end{lispcode}
+
+\section{Modo Simbólico}
+\begin{lispcode}
+(distance-sym 'x 'y)  ;; → sqrt(x**2 + y**2)
+\end{lispcode}
+
+\section{Modo Numérico}
+\begin{lispcode}
+(distance-num (numpy-array '(3 4)) (numpy-array '(4 3)))
+\end{lispcode}
+
+\section{Derivación Automática}
+\begin{lispcode}
+(sympy-derive (defmath f (x) (expt x 3)) 'x)
+\end{lispcode}
+
+\begin{examplebox}[title=Función Lorentziana híbrida]
+\begin{lispcode}
+(defmath lorentzian (x gamma) (/ 1 (+ 1 (expt (/ x gamma) 2))))
+(sympy-derive (lorentzian-sym 'x 'gamma) 'x)
+(let ((xs (numpy-linspace -10 10 1000))) (lorentzian-num xs 1.0))
+\end{lispcode}
+\end{examplebox}
+

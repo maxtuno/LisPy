@@ -1,0 +1,35 @@
+\chapter{Motor de Búsqueda}
+\label{chap:search-engine}
+{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$} Experto
+
+\section{Índice Invertido}
+\begin{lispcode}
+(defun build-index (documents)
+  (let ((index (make-hash-table :test 'equal)))
+    (dolist (doc documents)
+      (dolist (word (split-string (cadr doc)))
+        (pushnew (car doc) (gethash word index))))
+    index))
+\end{lispcode}
+
+\section{Búsqueda}
+\begin{lispcode}
+(defun search (query index &key (top-k 5))
+  (let* ((words (split-string query))
+         (scores (make-hash-table :test 'eql)))
+    (dolist (word words)
+      (dolist (doc-id (gethash word index))
+        (incf (gethash doc-id scores 0))))
+    (sort (loop for k being the hash-keys of scores
+                collect (list k (gethash k scores)))
+          #'> :key #'second :end top-k)))
+\end{lispcode}
+
+\begin{examplebox}[title=Ejemmplo]
+\begin{lispcode}
+(defvar *docs* '((1 "machine learning") (2 "deep learning") (3 "python ml")))
+(defvar *index* (build-index *docs*))
+(search "learning" *index*)
+\end{lispcode}
+\end{examplebox}
+

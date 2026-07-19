@@ -1,0 +1,32 @@
+\chapter{La Macro de Lectura \texttt{\#\_}}
+\label{chap:reader-underscore}
+{\huge$\bigstar$}{\huge$\bigstar$} Intermedio
+
+\section{Sintaxis}
+\begin{lispcode}
+\#_nombre:atributo1:atributo2
+\end{lispcode}
+
+\section{Expansión}
+\begin{lispcode}
+\#_math:pi           ;; → 3.14159...
+(\#_math:sqrt 16)    ;; → 4.0
+\end{lispcode}
+
+\section{Encadenamiento}
+\begin{lispcode}
+(\#_os:path:join "/usr" "bin")
+;; Equivalente a py:call con os.path.join
+\end{lispcode}
+
+\begin{warningbox}
+\texttt{\#\_} no debe usarse con \texttt{:} adicionales que el lector
+interpretaría como sintaxis de paquete.
+\end{warningbox}
+
+\begin{examplebox}[title=Constantes matemáticas]
+\begin{lispcode}
+\#_math:pi  \#_math:e  \#_math:tau
+\end{lispcode}
+\end{examplebox}
+

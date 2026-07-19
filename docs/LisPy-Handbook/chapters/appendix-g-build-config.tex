@@ -1,0 +1,65 @@
+\chapter{Configuración de Build}
+\label{app:build}
+
+\section*{Opciones de Compilación}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Flag} & \textbf{Efecto} \\
+\midrule
+\texttt{-DLISPY\_PYTHON=ON} & Habilita soporte Python (defecto) \\
+\texttt{-DLISPY\_PYTHON=OFF} & Compila sin Python \\
+\texttt{-DCMAKE\_BUILD\_TYPE=Release} & Optimización máxima \\
+\texttt{-DCMAKE\_BUILD\_TYPE=Debug} & Símbolos de depuración \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section*{Requisitos para Build con Python}
+
+\begin{itemize}
+\item CPython 3.14 development headers
+\item CMake 3.20+
+\item Ninja o Make
+\item Compilador C99 (GCC, Clang, MSVC)
+\end{itemize}
+
+\section*{Build en Linux}
+
+\begin{verbatim}
+sudo apt install python3-dev cmake ninja-build
+cmake -S . -B build -G Ninja -DLISPY_PYTHON=ON
+ninja -C build
+\end{verbatim}
+
+\section*{Build en Windows}
+
+\begin{verbatim}
+cmake -S . -B build -G Ninja -DLISPY_PYTHON=ON
+ninja -C build
+\end{verbatim}
+
+\section*{Build sin Python}
+
+\begin{verbatim}
+cmake -S . -B build -G Ninja -DLISPY_PYTHON=OFF
+ninja -C build
+\end{verbatim}
+
+\section*{Estructura de Archivos Post-Build}
+
+\begin{verbatim}
+build/
+├── bin/
+│   └── lispy.exe        # Intérprete
+└── lib/
+    └── ...               # Librerías de soporte
+
+LisPy/
+├── lispy.c              # Código fuente
+├── lib/                 # Librerías Lisp
+├── docs/                # Documentación
+└── README.md
+\end{verbatim}
+

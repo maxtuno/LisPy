@@ -1,0 +1,29 @@
+\chapter{Motor de Trading Algorítmico}
+\label{chap:trading-engine}
+{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$} Experto
+
+\section{Modelo de Órdenes (CLOS)}
+\begin{lispcode}
+(defclass order ()
+  ((symbol :initarg :symbol :reader order-symbol)
+   (quantity :initarg :quantity :reader order-quantity)
+   (price :initarg :price :reader order-price)
+   (type :initarg :type :reader order-type)))
+(defclass market-order (order) ((type :initform :market)))
+(defclass limit-order (order) ((type :initform :limit)
+                               (limit-price :initarg :limit-price)))
+\end{lispcode}
+
+\section{Estrategia (medias móviles)}
+\begin{lispcode}
+(defclass moving-average-cross ()
+  ((short-period :initarg :short :initform 20)
+   (long-period :initarg :long :initform 50)))
+(defgeneric execute-strategy (strategy data))
+(defmethod execute-strategy ((s moving-average-cross) data)
+  (let* ((prices (py:getitem data "close"))
+         (short-ma (numpy-mean (subseq prices 0 20)))
+         (long-ma (numpy-mean (subseq prices 0 50))))
+    (if (> short-ma long-ma) :buy :sell)))
+\end{lispcode}
+

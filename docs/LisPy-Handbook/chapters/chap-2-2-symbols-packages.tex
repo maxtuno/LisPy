@@ -1,0 +1,43 @@
+\chapter{Símbolos, Paquetes y Namespaces}
+\label{chap:packages}
+{\huge$\bigstar$}{\huge$\bigstar$} Intermedio
+
+\section{Símbolos}
+\begin{lispcode}
+(intern "FOO")
+(make-symbol "FOO")
+(gensym "TEMP")
+(symbol-name 'foo)
+(symbol-package 'foo)
+(boundp 'x)
+(fboundp 'car)
+\end{lispcode}
+
+\section{Property Lists}
+\begin{lispcode}
+(setf (get 'persona :nombre) "Juan")
+(symbol-plist 'persona)
+(remprop 'persona :edad)
+\end{lispcode}
+
+\section{Paquetes}
+\begin{lispcode}
+(defpackage :mi-paquete (:use :common-lisp) (:export :funcion-exportada))
+(in-package :mi-paquete)
+(defun funcion-exportada () "visible fuera")
+\end{lispcode}
+
+\section{El Paquete PYTHON}
+\begin{lispcode}
+(find-package :py)
+(find-package :python)
+\end{lispcode}
+
+\begin{examplebox}[title=Gensym para higiene en macros]
+\begin{lispcode}
+(defmacro con-temp ((var valor) &body body)
+  (let ((g (gensym)))
+    `(let ((,g ,valor)) (let ((,var ,g)) ,@body))))
+\end{lispcode}
+\end{examplebox}
+

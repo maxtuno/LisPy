@@ -1,0 +1,123 @@
+\chapter{Referencia Rápida de Common Lisp en LisPy}
+\label{app:quickref}
+
+\section*{Operadores Aritméticos}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Operación} & \textbf{Sintaxis} \\
+\midrule
+Suma & \texttt{(+ a b c ...)} \\
+Resta & \texttt{(- a b)} \\
+Multiplicación & \texttt{(* a b c ...)} \\
+División & \texttt{(/ a b)} \\
+División entera & \texttt{(floor a b)}, \texttt{(truncate a b)} \\
+Módulo & \texttt{(mod a b)} \\
+Exponenciación & \texttt{(expt a b)} \\
+Raíz cuadrada & \texttt{(sqrt a)} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section*{Comparación}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Operación} & \textbf{Sintaxis} \\
+\midrule
+Igualdad numérica & \texttt{(= a b)} \\
+Menor que & \texttt{(< a b)} \\
+Mayor que & \texttt{(> a b)} \\
+Menor o igual & \texttt{(<= a b)} \\
+Mayor o igual & \texttt{(>= a b)} \\
+Identidad & \texttt{(eq a b)}, \texttt{(eql a b)} \\
+Igualdad estructural & \texttt{(equal a b)} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section*{Listas}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Operación} & \textbf{Sintaxis} \\
+\midrule
+Construir cons & \texttt{(cons a b)} \\
+Primer elemento & \texttt{(car list)}, \texttt{(first list)} \\
+Resto & \texttt{(cdr list)}, \texttt{(rest list)} \\
+N-ésimo & \texttt{(nth n list)} \\
+Longitud & \texttt{(length list)} \\
+Unir & \texttt{(append list1 list2)} \\
+Invertir & \texttt{(reverse list)} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section*{Vectores}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Operación} & \textbf{Sintaxis} \\
+\midrule
+Crear & \texttt{(make-array n)}, \texttt{(vector a b c)} \\
+Acceso & \texttt{(aref vector i)} \\
+Asignación & \texttt{(setf (aref vector i) val)} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section*{Hash Tables}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Operación} & \textbf{Sintaxis} \\
+\midrule
+Crear & \texttt{(make-hash-table :test 'equal)} \\
+Acceso & \texttt{(gethash key ht)} \\
+Asignación & \texttt{(setf (gethash key ht) val)} \\
+Eliminar & \texttt{(remhash key ht)} \\
+Limpiar & \texttt{(clrhash ht)} \\
+Recorrer & \texttt{(maphash fn ht)} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section*{Control de Flujo}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Constructo} & \textbf{Sintaxis} \\
+\midrule
+Condicional & \texttt{(if test then else)} \\
+Condicional múltiple & \texttt{(cond (test1 forms1) ...)} \\
+Iteración simple & \texttt{(dotimes (i n) forms)} \\
+Iteración en lista & \texttt{(dolist (x list) forms)} \\
+LOOP general & \texttt{(loop for x in list collect x)} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section*{Python Bridge}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Operación} & \textbf{Sintaxis} \\
+\midrule
+Importar módulo & \texttt{(py:import "module")} \\
+Llamar función & \texttt{(py:call fn args...)} \\
+Acceder atributo & \texttt{(py:attr obj "name")} \\
+Acceder índice & \texttt{(py:getitem obj key)} \\
+Ejecutar código & \texttt{(py:run "code")} \\
+A Lisp & \texttt{(py:->lisp python-obj)} \\
+A Python & \texttt{(py:->python lisp-val)} \\
+\bottomrule
+\end{tabular}
+\end{center}
+

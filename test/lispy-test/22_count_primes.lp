@@ -1,0 +1,28 @@
+(defun isqrt (n)
+  (when (= n 0) (return-from isqrt 0))
+  (let ((left 1) (right n) (ans 0))
+    (loop while (<= left right)
+          do (let ((mid (floor (+ left right) 2)))
+               (if (<= (* mid mid) n)
+                   (setf ans mid left (1+ mid))
+                   (setf right (1- mid)))))
+    ans))
+
+(defun count-primes (n)
+  (when (< n 3) (return-from count-primes 0))
+  (let* ((is-prime (make-array n :initial-element t))
+         (limit (isqrt n)))
+    (setf (aref is-prime 0) nil)
+    (setf (aref is-prime 1) nil)
+    (loop for i from 2 to limit
+          do (when (aref is-prime i)
+               (loop for j from (* i i) below n by i
+                     do (setf (aref is-prime j) nil))))
+    (let ((count 0))
+      (dotimes (i n)
+        (when (aref is-prime i) (incf count)))
+      count)))
+
+(format t "Count Primes:~%")
+(format t "  10 => ~A~%" (count-primes 10))
+(format t "  20 => ~A~%" (count-primes 20))

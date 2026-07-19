@@ -1,0 +1,5 @@
+(py:print "Hola")
+(py:abs -42)
+(py:sum '(1 2 3 4 5))
+(py:sorted '(3 1 4 1 5))
+(py:len "hello")

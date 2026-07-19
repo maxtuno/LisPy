@@ -1,0 +1,549 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "scopeName": "source.lp",
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#embedded-python" },
+    { "include": "#python-strings" },
+    { "include": "#strings" },
+    { "include": "#python-decorators" },
+    { "include": "#reader-macros" },
+    { "include": "#python-comments" },
+    { "include": "#special-forms" },
+    { "include": "#builtin-lisp" },
+    { "include": "#constants-keywords" },
+    { "include": "#py-symbols" },
+    { "include": "#python-keywords" },
+    { "include": "#python-builtins" },
+    { "include": "#numbers" },
+    { "include": "#symbols" }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "comment": "Block comment #| ... |#",
+          "name": "comment.block.lisp",
+          "begin": "#\\|",
+          "end": "\\|#"
+        },
+        {
+          "comment": "Line comment ;",
+          "name": "comment.line.semicolon.lisp",
+          "match": ";.*$"
+        }
+      ]
+    },
+    "strings": {
+      "comment": "Lisp double-quoted strings (also valid Python)",
+      "patterns": [
+        {
+          "comment": "Double-quoted string with escape handling",
+          "name": "string.quoted.double.lisp",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            { "match": "\\\\.", "name": "constant.character.escape.lisp" }
+          ]
+        }
+      ]
+    },
+    "python-strings": {
+      "comment": "Python-specific string literals: single-quoted, triple-quoted, f-strings, raw strings, byte strings",
+      "patterns": [
+        {
+          "comment": "Triple-double-quoted string (possibly f/r/b prefixed)",
+          "name": "string.quoted.double.python",
+          "begin": "([fF][rR]?|[rR][fF]?|[bB]|[uU])?\"\"\"",
+          "end": "\"\"\"",
+          "beginCaptures": {
+            "1": { "name": "storage.type.string.python" }
+          },
+          "patterns": [
+            { "match": "\\\\.", "name": "constant.character.escape.python" },
+            { "include": "#fstring-interpolation" }
+          ]
+        },
+        {
+          "comment": "Triple-single-quoted string (possibly f/r/b prefixed)",
+          "name": "string.quoted.single.python",
+          "begin": "([fF][rR]?|[rR][fF]?|[bB]|[uU])?'''",
+          "end": "'''",
+          "beginCaptures": {
+            "1": { "name": "storage.type.string.python" }
+          },
+          "patterns": [
+            { "match": "\\\\.", "name": "constant.character.escape.python" },
+            { "include": "#fstring-interpolation" }
+          ]
+        },
+        {
+          "comment": "Prefixed double-quoted string (f/r/b with single-line quotes)",
+          "name": "string.quoted.double.python",
+          "begin": "([fF][rR]?|[rR][fF]?|[bB])[\"]",
+          "end": "\"",
+          "beginCaptures": {
+            "1": { "name": "storage.type.string.python" }
+          },
+          "patterns": [
+            { "match": "\\\\.", "name": "constant.character.escape.python" },
+            { "include": "#fstring-interpolation" }
+          ]
+        },
+        {
+          "comment": "Single-quoted Python string (prefixed only: b'...', f'...', r'...', u'...'). Bare ' is reserved for Lisp quote.",
+          "name": "string.quoted.single.python",
+          "begin": "([fF][rR]?|[rR][fF]?|[bB]|[uU])'",
+          "end": "'",
+          "beginCaptures": {
+            "1": { "name": "storage.type.string.python" }
+          },
+          "patterns": [
+            { "match": "\\\\.", "name": "constant.character.escape.python" },
+            { "include": "#fstring-interpolation" }
+          ]
+        }
+      ]
+    },
+    "fstring-interpolation": {
+      "comment": "f-string {expression} interpolation",
+      "patterns": [
+        {
+          "match": "\\{[^}]*\\}",
+          "name": "meta.embedded.expression.python",
+          "patterns": [
+            { "include": "#python-keywords" },
+            { "include": "#python-builtins" },
+            { "include": "#numbers" }
+          ]
+        }
+      ]
+    },
+    "embedded-python": {
+      "patterns": [
+        {
+          "comment": "py:run \"...\" — Python code embedded as string argument",
+          "name": "meta.embedded.python.lp",
+          "begin": "(py:run)\\s*(\")",
+          "beginCaptures": {
+            "1": { "name": "support.function.python.lisp" },
+            "2": { "name": "punctuation.definition.string.begin.lisp" }
+          },
+          "end": "\"",
+          "endCaptures": {
+            "0": { "name": "punctuation.definition.string.end.lisp" }
+          },
+          "patterns": [
+            { "match": "\\\\.", "name": "constant.character.escape.lisp" },
+            { "include": "source.python" }
+          ]
+        },
+        {
+          "comment": "#python \"...\" — alternative Python embedding via reader macro",
+          "name": "meta.embedded.python.lp",
+          "begin": "(#python)\\s*(\")",
+          "beginCaptures": {
+            "1": { "name": "keyword.control.lisp" },
+            "2": { "name": "punctuation.definition.string.begin.lisp" }
+          },
+          "end": "\"",
+          "endCaptures": {
+            "0": { "name": "punctuation.definition.string.end.lisp" }
+          },
+          "patterns": [
+            { "match": "\\\\.", "name": "constant.character.escape.lisp" },
+            { "include": "source.python" }
+          ]
+        }
+      ]
+    },
+    "reader-macros": {
+      "comment": "Common Lisp reader macros: #', #\\, #(, #., #+, #-, #_",
+      "patterns": [
+        {
+          "comment": "#_ attribute chaining for Python interop",
+          "match": "(#_)([a-zA-Z][a-zA-Z0-9-]*(?::[a-zA-Z][a-zA-Z0-9-]*)*)",
+          "captures": {
+            "1": { "name": "keyword.control.reader-macro.lisp" },
+            "2": { "name": "support.type.python-module.lisp" }
+          }
+        },
+        {
+          "comment": "' quote (shorthand for (quote ...))",
+          "match": "'(?=[a-zA-Z\\(])",
+          "name": "keyword.operator.lisp"
+        },
+        {
+          "comment": "#' function quote",
+          "match": "#'([a-zA-Z][a-zA-Z0-9\\-\\*\\+\\/\\<\\>\\=\\?\\!]*)",
+          "captures": {
+            "0": { "name": "keyword.operator.lisp" }
+          }
+        },
+        {
+          "comment": "#\\ character literal",
+          "match": "#\\\\(.|[a-zA-Z][a-zA-Z0-9-]*)",
+          "name": "constant.character.lisp"
+        },
+        {
+          "comment": "#( vector",
+          "match": "#\\(",
+          "name": "keyword.operator.lisp"
+        },
+        {
+          "comment": "#. read-time eval",
+          "match": "#\\.",
+          "name": "keyword.operator.lisp"
+        },
+        {
+          "comment": "#+ / #- feature expressions",
+          "match": "#[\\+\\-]",
+          "name": "keyword.control.lisp"
+        }
+      ]
+    },
+    "python-comments": {
+      "comment": "Python # line comments. Lisp reader macros (#|, #', #(, #., #+, #-, #_) and embedded-python (#python) are matched first by preceding patterns.",
+      "patterns": [
+        {
+          "match": "#.*$",
+          "name": "comment.line.number-sign.lp"
+        }
+      ]
+    },
+    "python-decorators": {
+      "comment": "Python decorators: @decorator, @decorator(args), @module.decorator",
+      "patterns": [
+        {
+          "comment": "Decorator with arguments: @decorator(...)",
+          "match": "^\\s*(@)([a-zA-Z_][a-zA-Z0-9_]*(?:\\.[a-zA-Z_][a-zA-Z0-9_]*)*)\\s*(\\()",
+          "captures": {
+            "1": { "name": "keyword.operator.decorator.python" },
+            "2": { "name": "entity.name.function.decorator.python" },
+            "3": { "name": "punctuation.definition.arguments.begin.python" }
+          }
+        },
+        {
+          "comment": "Simple decorator: @decorator",
+          "match": "^\\s*(@)([a-zA-Z_][a-zA-Z0-9_]*(?:\\.[a-zA-Z_][a-zA-Z0-9_]*)*)\\b",
+          "captures": {
+            "1": { "name": "keyword.operator.decorator.python" },
+            "2": { "name": "entity.name.function.decorator.python" }
+          }
+        }
+      ]
+    },
+    "python-keywords": {
+      "comment": "Python keywords and special identifiers",
+      "patterns": [
+        {
+          "comment": "Python def function definition — highlight the name",
+          "match": "\\b(def)\\s+([a-zA-Z_][a-zA-Z0-9_]*)\\s*(\\()",
+          "captures": {
+            "1": { "name": "keyword.control.python" },
+            "2": { "name": "entity.name.function.python" },
+            "3": { "name": "punctuation.definition.parameters.begin.python" }
+          }
+        },
+        {
+          "comment": "Python class definition — highlight the name",
+          "match": "\\b(class)\\s+([a-zA-Z_][a-zA-Z0-9_]*)",
+          "captures": {
+            "1": { "name": "keyword.control.python" },
+            "2": { "name": "entity.name.type.class.python" }
+          }
+        },
+        {
+          "comment": "Python async def function definition",
+          "match": "\\b(async)\\s+(def)\\s+([a-zA-Z_][a-zA-Z0-9_]*)\\s*(\\()",
+          "captures": {
+            "1": { "name": "keyword.control.python" },
+            "2": { "name": "keyword.control.python" },
+            "3": { "name": "entity.name.function.python" },
+            "4": { "name": "punctuation.definition.parameters.begin.python" }
+          }
+        },
+        {
+          "comment": "Python async for / async with",
+          "match": "\\b(async)\\s+(for|with)\\b",
+          "captures": {
+            "1": { "name": "keyword.control.python" },
+            "2": { "name": "keyword.control.python" }
+          }
+        },
+        {
+          "comment": "Python block-starting keywords followed by colon",
+          "match": "\\b(elif|else|except|finally|for|if|match|case|try|while|with)\\b(?=[^:]*:)",
+          "name": "keyword.control.python"
+        },
+        {
+          "comment": "Python small keywords and operators",
+          "match": "\\b(as|assert|async|await|break|continue|del|exec|from|global|import|in|is|lambda|nonlocal|not|or|pass|raise|return|yield)\\b",
+          "name": "keyword.control.python"
+        },
+        {
+          "comment": "Python boolean and special constants",
+          "match": "\\b(True|False|None|Ellipsis|NotImplemented|__debug__)\\b",
+          "name": "constant.language.python"
+        },
+        {
+          "comment": "Python and operator (not in Lisp context)",
+          "match": "\\b(and)\\b",
+          "name": "keyword.operator.logical.python"
+        },
+        {
+          "comment": "Python special method names (dunder methods)",
+          "match": "\\b(__[a-zA-Z_][a-zA-Z0-9_]*__)\\b",
+          "name": "support.function.magic.python"
+        },
+        {
+          "comment": "Python self / cls parameters",
+          "match": "\\b(self|cls)\\b",
+          "name": "variable.language.self.python"
+        },
+        {
+          "comment": "Python *args and **kwargs variable arguments",
+          "match": "(\\*{1,2})([a-zA-Z_][a-zA-Z0-9_]*)",
+          "captures": {
+            "1": { "name": "keyword.operator.unpacking.python" },
+            "2": { "name": "variable.parameter.python" }
+          }
+        },
+        {
+          "comment": "Python type hint return arrow",
+          "match": "->",
+          "name": "keyword.operator.annotation.python"
+        },
+        {
+          "comment": "Python walrus operator :=",
+          "match": ":=",
+          "name": "keyword.operator.assignment.python"
+        }
+      ]
+    },
+    "python-builtins": {
+      "comment": "Python built-in functions, types, and exceptions",
+      "patterns": [
+        {
+          "comment": "Built-in functions",
+          "match": "\\b(abs|all|any|ascii|bin|bool|breakpoint|bytearray|bytes|callable|chr|classmethod|compile|complex|delattr|dict|dir|divmod|enumerate|eval|exec|filter|float|format|frozenset|getattr|globals|hasattr|hash|help|hex|id|input|int|isinstance|issubclass|iter|len|list|locals|map|max|memoryview|min|next|object|oct|open|ord|pow|print|property|range|repr|reversed|round|set|setattr|slice|sorted|staticmethod|str|sum|super|tuple|type|vars|zip|__import__)\\b",
+          "name": "support.function.builtin.python"
+        },
+        {
+          "comment": "Built-in exception types",
+          "match": "\\b(BaseException|Exception|ArithmeticError|BufferError|LookupError|AssertionError|AttributeError|EOFError|FloatingPointError|GeneratorExit|ImportError|ModuleNotFoundError|IndexError|KeyError|KeyboardInterrupt|MemoryError|NameError|NotImplementedError|OSError|OverflowError|ReferenceError|RuntimeError|RecursionError|StopIteration|StopAsyncIteration|SyntaxError|IndentationError|TabError|SystemError|SystemExit|TypeError|UnboundLocalError|UnicodeError|UnicodeEncodeError|UnicodeDecodeError|UnicodeTranslateError|ValueError|ZeroDivisionError|EnvironmentError|IOError|WindowsError|BlockingIOError|ChildProcessError|ConnectionError|BrokenPipeError|ConnectionAbortedError|ConnectionRefusedError|ConnectionResetError|FileExistsError|FileNotFoundError|InterruptedError|IsADirectoryError|NotADirectoryError|PermissionError|ProcessLookupError|TimeoutError|Warning|UserWarning|DeprecationWarning|PendingDeprecationWarning|SyntaxWarning|RuntimeWarning|FutureWarning|ImportWarning|UnicodeWarning|BytesWarning|ResourceWarning)\\b",
+          "name": "support.type.exception.python"
+        },
+        {
+          "comment": "Common Python module-level functions",
+          "match": "\\b(reprlib\\.repr|pprint\\.pprint|textwrap\\.fill|math\\.(sin|cos|tan|asin|acos|atan|atan2|sinh|cosh|tanh|asinh|acosh|atanh|log|log10|log2|exp|sqrt|pow|ceil|floor|trunc|factorial|gcd|lcm|degrees|radians|pi|e|tau|inf|nan))\\b",
+          "name": "support.function.builtin.python"
+        }
+      ]
+    },
+    "special-forms": {
+      "comment": "Common Lisp special forms and macros",
+      "patterns": [
+        {
+          "comment": "Function/macro definition — highlight the name",
+          "match": "\\((defun|defmacro|defgeneric|defmethod)\\s+([a-zA-Z][a-zA-Z0-9\\-\\*\\+\\/\\<\\>\\=\\?\\!]*)",
+          "captures": {
+            "1": { "name": "keyword.control.lisp" },
+            "2": { "name": "entity.name.function.lisp" }
+          }
+        },
+        {
+          "comment": "Variable/class/struct definition — highlight the name",
+          "match": "\\((defvar|defparameter|defconstant|defclass|defstruct|deftype)\\s+([a-zA-Z][a-zA-Z0-9\\-\\*\\+\\/\\<\\>\\=\\?\\!]*)",
+          "captures": {
+            "1": { "name": "keyword.control.lisp" },
+            "2": { "name": "entity.name.type.lisp" }
+          }
+        },
+        {
+          "comment": "Binding forms — let, let*, lambda, flet, labels, macrolet, destructuring-bind",
+          "match": "\\b(let|let\\*|lambda|flet|labels|macrolet|destructuring-bind|multiple-value-bind)\\b",
+          "name": "keyword.control.lisp"
+        },
+        {
+          "comment": "Conditionals",
+          "match": "\\b(if|when|unless|cond|case|ecase|ccase|typecase|etypecase|ctypecase)\\b",
+          "name": "keyword.control.lisp"
+        },
+        {
+          "comment": "Sequencing and blocks",
+          "match": "\\b(progn|prog1|prog2|block|return-from|tagbody|go|unwind-protect|catch|throw)\\b",
+          "name": "keyword.control.lisp"
+        },
+        {
+          "comment": "Looping constructs",
+          "match": "\\b(loop|do|do\\*|dolist|dotimes|do-symbols|do-all-symbols|do-external-symbols)\\b",
+          "name": "keyword.control.lisp"
+        },
+        {
+          "comment": "LOOP clause keywords",
+          "match": "\\b(for|from|to|by|below|downto|above|collect|append|nconc|count|sum|maximize|minimize|while|until|always|never|thereis|with|initially|finally|across|on|being|each|the|hash-key|hash-value|using|named|into|doing)\\b",
+          "name": "keyword.control.lisp"
+        },
+        {
+          "comment": "Assignment and mutation",
+          "match": "\\b(setf|setq|incf|decf|push|pop|pushnew|rotatef|shiftf|psetf|psetq|defsetf|define-setf-expander)\\b",
+          "name": "keyword.control.lisp"
+        },
+        {
+          "comment": "Error handling",
+          "match": "\\b(handler-case|handler-bind|ignore-errors|restart-case|restart-bind|with-simple-restart|error|warn|signal|cerror|break)\\b",
+          "name": "keyword.control.lisp"
+        },
+        {
+          "comment": "Evaluation control",
+          "match": "\\b(quote|function|eval-when|load-time-value|the|locally|declare|proclaim|declaim)\\b",
+          "name": "keyword.control.lisp"
+        },
+        {
+          "comment": "Package and symbol",
+          "match": "\\b(defpackage|in-package|import|export|use-package|shadow|shadowing-import|unintern|find-package|make-package|rename-package)\\b",
+          "name": "keyword.control.lisp"
+        },
+        {
+          "comment": "Other special operators",
+          "match": "\\b(values|values-list|multiple-value-list|multiple-value-call|multiple-value-prog1|multiple-value-setq)\\b",
+          "name": "keyword.control.lisp"
+        }
+      ]
+    },
+    "builtin-lisp": {
+      "comment": "Common Lisp built-in functions",
+      "patterns": [
+        {
+          "comment": "Arithmetic and comparison",
+          "match": "\\b(\\+|-|\\*|\\/|\\/\\=|1\\+|1\\-|mod|rem|floor|ceiling|round|truncate|sin|cos|tan|asin|acos|atan|sinh|cosh|tanh|sqrt|exp|expt|log|abs|signum|min|max|random|gcd|lcm|isqrt|conjugate|phase|realpart|imagpart)\\b",
+          "name": "support.function.lisp"
+        },
+        {
+          "comment": "Predicates and type checking",
+          "match": "\\b(null|atom|consp|listp|symbolp|numberp|integerp|floatp|stringp|characterp|functionp|arrayp|vectorp|hash-table-p|packagep|typep|subtypep|type-of|class-of|boundp|fboundp|special-operator-p|keywordp|evenp|oddp|plusp|minusp|zerop)\\b",
+          "name": "support.function.lisp"
+        },
+        {
+          "comment": "Compact predicates (single test)",
+          "match": "\\b(eq|eql|equal|equalp|<|>|<=|>=|\\/=)\\b",
+          "name": "support.function.lisp"
+        },
+        {
+          "comment": "List operations",
+          "match": "\\b(car|cdr|caar|cadr|cdar|cddr|caaar|caadr|cadar|caddr|cdaar|cdadr|cddar|cdddr|first|second|third|fourth|fifth|sixth|seventh|eighth|ninth|tenth|rest|nth|nthcdr|last|length|cons|list|list\\*|make-list|append|revappend|nconc|nreconc|reverse|nreverse|member|member-if|member-if-not|tailp|adjoin|assoc|assoc-if|assoc-if-not|rassoc|rassoc-if|rassoc-if-not|acons|pairlis|copy-list|copy-tree|sublis|nsublis|subst|subst-if|subst-if-not|nsubst|nsubst-if|nsubst-if-not|tree-equal|ldiff|butlast|nbutlast|union|nunion|intersection|nintersection|set-difference|nset-difference|set-exclusive-or|nset-exclusive-or|subsetp|find|find-if|find-if-not|position|position-if|position-if-not|count|count-if|count-if-not|remove|remove-if|remove-if-not|delete|delete-if|delete-if-not|remove-duplicates|delete-duplicates|sort|stable-sort|merge|mapcar|mapc|mapcan|mapl|maplist|mapcon|map|reduce)\\b",
+          "name": "support.function.lisp"
+        },
+        {
+          "comment": "Sequence and array operations",
+          "match": "\\b(aref|svref|elt|subseq|copy-seq|fill|replace|make-array|vector|make-sequence|adjust-array|adjustable-array-p|array-dimension|array-dimensions|array-total-size|array-element-type|array-rank|array-displacement|array-in-bounds-p|array-row-major-index|row-major-aref|bit|sbit|make-string|char|schar|string|string-upcase|string-downcase|string-capitalize|string-trim|string-left-trim|string-right-trim|string=|string-equal|string\\/=|string-not-equal|string<|string-lessp|string>|string-greaterp|string<=|string-not-greaterp|string>=|string-not-lessp|search|mismatch|concatenate|map-into|coerce)\\b",
+          "name": "support.function.lisp"
+        },
+        {
+          "comment": "Hash table operations",
+          "match": "\\b(make-hash-table|gethash|remhash|maphash|clrhash|hash-table-count|hash-table-rehash-size|hash-table-rehash-threshold|hash-table-size|hash-table-test|sxhash)\\b",
+          "name": "support.function.lisp"
+        },
+        {
+          "comment": "I/O operations",
+          "match": "\\b(format|print|prin1|princ|terpri|fresh-line|write|write-line|write-string|write-char|read|read-line|read-char|read-byte|write-byte|peek-char|listen|clear-input|clear-output|finish-output|force-output|y-or-n-p|yes-or-no-p|open|close|with-open-file|with-open-stream|with-input-from-string|with-output-to-string|make-string-input-stream|make-string-output-stream|get-output-stream-string|file-position|file-length|file-string-length|probe-file|delete-file|rename-file|ensure-directories-exist|truename|directory|pathname|make-pathname|pathnamep|parse-namestring|namestring|directory-namestring|host-namestring|enough-namestring|merge-pathnames|wild-pathname-p|user-homedir-pathname|load|compile-file|compile)\\b",
+          "name": "support.function.lisp"
+        },
+        {
+          "comment": "Functional programming",
+          "match": "\\b(apply|funcall|mapcar|some|every|notany|notevery|identity|constantly|complement)\\b",
+          "name": "support.function.lisp"
+        },
+        {
+          "comment": "Symbol and package",
+          "match": "\\b(gensym|gentemp|intern|find-symbol|symbol-name|symbol-package|symbol-value|symbol-function|symbol-plist|make-symbol|copy-symbol|keywordp|get|getf|remprop)\\b",
+          "name": "support.function.lisp"
+        }
+      ]
+    },
+    "constants-keywords": {
+      "comment": "t, nil, and :keyword symbols",
+      "patterns": [
+        {
+          "comment": "Boolean constants",
+          "match": "\\b(t|nil)\\b(?![a-zA-Z0-9\\-\\*\\+\\/\\<\\>\\=\\?\\!])",
+          "name": "constant.language.lisp"
+        },
+        {
+          "comment": "Keyword symbols :foo",
+          "match": "(:[a-zA-Z][a-zA-Z0-9\\-]*)",
+          "name": "constant.keyword.lisp"
+        }
+      ]
+    },
+    "py-symbols": {
+      "comment": "py:xxx symbols — Python builtin/module access",
+      "patterns": [
+        {
+          "match": "(?<![a-zA-Z0-9-])(py:[a-zA-Z][a-zA-Z0-9-]*)",
+          "name": "support.function.python.lisp"
+        }
+      ]
+    },
+    "numbers": {
+      "comment": "Numeric literals: Lisp and Python number formats",
+      "patterns": [
+        {
+          "comment": "Python hex integer (0x...)",
+          "match": "\\b0[xX][0-9a-fA-F][0-9a-fA-F_]*(?:[lL])?\\b",
+          "name": "constant.numeric.hex.python"
+        },
+        {
+          "comment": "Python octal integer (0o...)",
+          "match": "\\b0[oO][0-7][0-7_]*(?:[lL])?\\b",
+          "name": "constant.numeric.octal.python"
+        },
+        {
+          "comment": "Python binary integer (0b...)",
+          "match": "\\b0[bB][01][01_]*(?:[lL])?\\b",
+          "name": "constant.numeric.binary.python"
+        },
+        {
+          "comment": "Python imaginary number",
+          "match": "\\b\\d+\\.?\\d*(?:[eE][+-]?\\d+)?[jJ]\\b",
+          "name": "constant.numeric.imaginary.python"
+        },
+        {
+          "comment": "Float with decimal point and optional scientific notation",
+          "match": "\\b\\d+\\.\\d+(?:[eE][+-]?\\d+)?\\b",
+          "name": "constant.numeric.float.lisp"
+        },
+        {
+          "comment": "Float starting with decimal point",
+          "match": "\\b\\.\\d+(?:[eE][+-]?\\d+)?\\b",
+          "name": "constant.numeric.float.lisp"
+        },
+        {
+          "comment": "Integer with underscore separators (Python style)",
+          "match": "\\b\\d[\\d_]*\\d\\b",
+          "name": "constant.numeric.integer.lisp"
+        },
+        {
+          "comment": "Integer or ratio (Lisp style)",
+          "match": "\\b\\d+\\/\\d+\\b",
+          "name": "constant.numeric.ratio.lisp"
+        },
+        {
+          "comment": "Integer (decimal)",
+          "match": "\\b\\d+\\b",
+          "name": "constant.numeric.integer.lisp"
+        }
+      ]
+    },
+    "symbols": {
+      "comment": "Any remaining identifier (Lisp symbol catch-all or Python variable)",
+      "patterns": [
+        {
+          "match": "[a-zA-Z_\\*\\+\\/\\<\\>\\=\\?\\!\\$\\%\\&\\@\\~\\^\\-][a-zA-Z0-9_\\*\\+\\/\\<\\>\\=\\?\\!\\$\\%\\&\\@\\~\\^\\-]*",
+          "name": "variable.other.lisp"
+        }
+      ]
+    }
+  }
+}

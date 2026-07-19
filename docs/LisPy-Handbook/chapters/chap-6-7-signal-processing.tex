@@ -1,0 +1,28 @@
+\chapter{Procesamiento de Señales}
+\label{chap:signal-processing}
+{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$} Experto
+
+\section{FFT}
+\begin{lispcode}
+(py:run "import numpy as np; import matplotlib.pyplot as plt
+fs = 1000; t = np.linspace(0, 1, fs)
+senal = np.sin(2*np.pi*50*t) + np.sin(2*np.pi*120*t)
+fft = np.fft.fft(senal); freqs = np.fft.fftfreq(len(senal), 1/fs)
+plt.plot(freqs[:len(freqs)//2], np.abs(fft)[:len(fft)//2]); plt.savefig('fft.png')")
+\end{lispcode}
+
+\section{Filtrado}
+\begin{lispcode}
+(py:run "from scipy import signal as sig; import numpy as np
+b, a = sig.butter(4, 0.1, 'low'); t = np.linspace(0, 1, 1000)
+clean = np.sin(2*np.pi*10*t); noisy = clean + 0.5*np.random.randn(len(t))
+filtered = sig.filtfilt(b, a, noisy)")
+\end{lispcode}
+
+\section{Interpolación}
+\begin{lispcode}
+(py:run "from scipy.interpolate import interp1d; import numpy as np
+xs = np.array([0,1,2,3,4,5]); ys = np.array([0,0.8,0.9,0.1,-0.8,-1.0])
+f = interp1d(xs, ys, kind='cubic'); xs_dense = np.linspace(0,5,100)")
+\end{lispcode}
+

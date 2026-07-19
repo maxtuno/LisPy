@@ -1,0 +1,10 @@
+(defun merge-sorted (a b)
+  (cond ((null a) b)
+        ((null b) a)
+        ((<= (first a) (first b))
+         (cons (first a) (merge-sorted (rest a) b)))
+        (t (cons (first b) (merge-sorted a (rest b))))))
+
+(format t "Merge Two Sorted Lists:~%")
+(format t "  [1,2,4] + [1,3,4] => ~A~%" (merge-sorted '(1 2 4) '(1 3 4)))
+(format t "  [] + [0] => ~A~%" (merge-sorted nil '(0)))

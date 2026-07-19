@@ -1,0 +1,5 @@
+(defvar *ht* (make-hash-table :test 'equal))
+(setf (gethash "clave" *ht*) "valor")
+(gethash "clave" *ht*)
+(remhash "clave" *ht*)
+(clrhash *ht*)

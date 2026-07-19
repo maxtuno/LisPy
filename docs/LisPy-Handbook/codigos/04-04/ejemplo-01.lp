@@ -1,0 +1,5 @@
+(load "lib/numpy-fast.lp")
+(defvar *arr* (numpy-array '(1 2 3 4 5)))
+(defvar *r* (numpy-arange 0 10 2))
+(defvar *z* (numpy-linspace 0 1 5))
+(defvar *zeros* (numpy-zeros 5))

@@ -1,0 +1,7 @@
+(defun detectar-intencion (texto)
+  (let ((lower (string-downcase texto)))
+    (cond ((search "hola" lower) :saludo)
+          ((search "nombre" lower) :nombre)
+          ((search "ayuda" lower) :ayuda)
+          ((or (search "adi\( ó \)s" lower) (search "chao" lower)) :despedida)
+          (t :desconocido))))

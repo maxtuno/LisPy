@@ -1,0 +1,12 @@
+(defun bouncy-p (n)
+  (let* ((s (format nil "~D" n)) (inc nil) (dec nil))
+    (loop for i from 1 below (length s)
+          do (when (char> (char s i) (char s (1- i))) (setf inc t))
+             (when (char< (char s i) (char s (1- i))) (setf dec t)))
+    (and inc dec)))
+
+(defun euler-112 ()
+  (let ((n 99) (bouncy 0))
+    (loop while (/= (* bouncy 100) (* 99 n))
+          do (incf n) (when (bouncy-p n) (incf bouncy)))
+    n))

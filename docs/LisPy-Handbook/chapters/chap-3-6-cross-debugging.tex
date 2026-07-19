@@ -1,0 +1,30 @@
+\chapter{Depuración Cruzada}
+\label{chap:cross-debugging}
+{\huge$\bigstar$}{\huge$\bigstar$} Intermedio
+
+\section{Último Traceback}
+\begin{lispcode}
+(ignore-errors (py:run "1/0"))
+(let ((frames (py:last-traceback)))
+  (format t "El error tuvo ~D frames~%" (length frames)))
+\end{lispcode}
+
+\section{Variables de Frame}
+\begin{lispcode}
+(let* ((frames (py:last-traceback))
+       (frame (elt frames 0)))
+  (py:frame-locals frame)     ;; → hash-table
+  (py:frame-globals frame)    ;; → hash-table
+  (py:frame-eval "x + y" frame))  ;; evalúa en contexto
+\end{lispcode}
+
+\begin{examplebox}[title=Inspección completa de error Python]
+\begin{lispcode}
+(py:run "def f(): return 1/0")
+(ignore-errors (py:call (py:attr (py:import "__main__") "f")))
+(let* ((frames (py:last-traceback))
+       (frame (elt frames 0)))
+  (format t "Locals: ~A~%" (py:frame-locals frame)))
+\end{lispcode}
+\end{examplebox}
+

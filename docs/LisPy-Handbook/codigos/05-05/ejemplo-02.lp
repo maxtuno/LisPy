@@ -1,0 +1,10 @@
+(defun inject-logging (ast)
+  (walk-ast ast
+    (lambda (node)
+      (if (and (listp node) (eq (car node) 'FunctionDef))
+          (let* ((n (cadr node)) (b (cadddr node)))
+            `(FunctionDef ,n ,(caddr node)
+              ((Expr (Call (Name "print" Load)
+                         ((Constant ,(format nil ">>> ~A" n))) ()))
+               ,@b) ,@(cddddr node)))
+          node))))

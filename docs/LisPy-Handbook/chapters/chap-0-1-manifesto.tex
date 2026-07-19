@@ -1,0 +1,79 @@
+\chapter{Manifiesto de LisPy}
+\label{chap:manifesto}
+
+LisPy nace de una convicción: no existe una razón técnica por la que un
+programador deba elegir entre el poder expresivo de Lisp y el vasto
+ecosistema de Python. La ingeniería de software moderna demanda ambos.
+
+\section{La Visión}
+
+LisPy integra dos runtimes en un mismo proceso: un intérprete de Common Lisp
+escrito en C99 portable y el runtime embebido de CPython 3.14. El resultado
+es un sistema donde las funciones de Lisp y Python conviven, se llaman
+mutuamente y comparten memoria bajo un mismo techo de abstracción.
+
+\section{¿Por qué Lisp?}
+
+Lisp ofrece cualidades que ningún otro lenguaje iguala:
+
+\begin{itemize}
+\item \textbf{Expresividad máxima.} El código Lisp son datos (S-expressions),
+  lo que permite metaprogramación sin precedentes mediante macros.
+\item \textbf{Sistema de objetos (CLOS).} El Common Lisp Object System es el
+  MOP (Meta-Object Protocol) más completo jamás diseñado, con métodos
+  multimétodo, combinación de métodos y metamodelo reflejable.
+\item \textbf{Sistema de condiciones.} El manejo de errores con
+  \texttt{handler-case}, \texttt{handler-bind} y \texttt{restart-case}
+  supera cualquier otro sistema de excepciones.
+\item \textbf{Macros higiénicas.} La metaprogramación en tiempo de compilación
+  permite crear DSLs (lenguajes de dominio específico) sin precedentes.
+\end{itemize}
+
+\section{¿Por qué Python?}
+
+Python domina el panorama actual por razones igualmente sólidas:
+
+\begin{itemize}
+\item \textbf{Ecosistema.} NumPy, SciPy, scikit-learn, PyTorch, pandas,
+  matplotlib -- ninguna plataforma científica iguala la madurez de Python.
+\item \textbf{Comunidad.} Millones de desarrolladores, bibliotecas para todo.
+\item \textbf{Rendimiento.} Aunque Python es lento como lenguaje, su ecosistema
+  de extensiones nativas (C, Fortran, CUDA) ofrece velocidad nativa.
+\end{itemize}
+
+\section{¿Por qué Juntos?}
+
+La combinación es cualitativamente superior a la suma de las partes. Lisp
+orquesta y genera código; Python ejecuta cómputo intensivo. La comunicación
+es bidireccional, con conversión automática de tipos y latencia
+microscópica.
+
+\section{Filosofía de Diseño}
+
+LisPy se construye sobre principios claros:
+
+\begin{itemize}
+\item \textbf{Single-file C99 portable.} Todo el intérprete es un único
+  archivo \texttt{lispy.c} de aproximadamente 66 000 líneas.
+\item \textbf{CPython 3.14 embebido.} Sin DLLs externas ni dependencias
+  frágiles: Python se linkea estáticamente.
+\item \textbf{Puente bidireccional.} Lisp llama a Python y Python llama a
+  Lisp con la misma naturalidad.
+\item \textbf{Conversión automática.} Tipos Lisp y Python se convierten
+  transparentemente siguiendo tablas bien definidas.
+\end{itemize}
+
+\section{Principio Rector}
+
+\medskip
+\begin{center}
+\fbox{\parbox{0.8\textwidth}{\centering\itshape
+Lisp como orquestador y generador,\\
+Python como motor de cálculo.}}
+\end{center}
+\medskip
+
+Este principio guía cada decisión de diseño: las partes del sistema que
+requieren flexibilidad, metaprogramación y abstracción viven en Lisp. Las
+partes que requieren cómputo numérico intensivo, acceso a bibliotecas
+establecidas o procesamiento de datos delegan en Python.

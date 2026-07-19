@@ -1,0 +1,30 @@
+\chapter{\texttt{pandas-bridge.lp}: DataFrames}
+\label{chap:pandas-bridge}
+{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$} Avanzado
+
+\section{Creación}
+\begin{lispcode}
+(load "lib/pandas-bridge.lp")
+(defvar *df* (pandas-read-csv "datos.csv"))
+(defvar *df2* (pandas-dataframe '((1 "A" 30) (2 "B" 25))
+                :columns '("ID" "Nombre" "Edad")))
+\end{lispcode}
+
+\section{Exploración}
+\begin{lispcode}
+(pandas-head *df*)
+(pandas-describe *df*)
+(pandas-info *df*)
+\end{lispcode}
+
+\section{Filtrado y Agrupación}
+\begin{lispcode}
+(pandas-filter *df* (lambda (row) (> (py:getitem row "Edad") 25)))
+(pandas-groupby *df* "Categoria" :aggregations '(("Ventas" . "sum")))
+\end{lispcode}
+
+\section{Visualización}
+\begin{lispcode}
+(pandas-plot *df* :kind "bar" :x "Nombre" :y "Edad")
+\end{lispcode}
+

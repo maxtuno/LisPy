@@ -1,0 +1,36 @@
+\chapter{Operaciones de Archivos y Streams}
+\label{chap:files-streams}
+{\huge$\bigstar$}{\huge$\bigstar$} Intermedio
+
+\section{Apertura de Archivos}
+\begin{lispcode}
+(with-open-file (stream "datos.txt" :direction :output :if-exists :supersede)
+  (format stream "línea 1~%"))
+\end{lispcode}
+
+\section{Opciones}
+\texttt{:if-exists :error}, \texttt{:supersede}, \texttt{:append}
+\texttt{:direction :input}, \texttt{:output}, \texttt{:io}
+
+\section{Streams de Strings}
+\begin{lispcode}
+(with-input-from-string (s "(+ 1 2)") (read s))
+(with-output-to-string (s) (princ "Hola" s) (princ " Mundo" s))
+\end{lispcode}
+
+\section{Navegación}
+\begin{lispcode}
+(file-position stream 100)
+(file-length stream)
+(file-write-date stream)
+\end{lispcode}
+
+\begin{examplebox}[title=Procesamiento de CSV simple]
+\begin{lispcode}
+(defun leer-csv (archivo)
+  (with-open-file (s archivo :direction :input)
+    (loop for line = (read-line s nil nil) while line collect
+          (uiop:split-string line :separator ","))))
+\end{lispcode}
+\end{examplebox}
+

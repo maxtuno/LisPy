@@ -1,0 +1,25 @@
+\chapter{Quasiquoting para Plantillas de Código}
+\label{chap:quasiquoting-templates}
+{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$} Experto
+
+\begin{lispcode}
+(let ((func-name "fast_pow") (exponent 10))
+  (write-python-template
+    `(def ,(intern func-name) (x) "return x ** ,exponent")))
+\end{lispcode}
+
+\section{Splicing con ,@}
+\begin{lispcode}
+(let ((extra '(z w)))
+  (write-python-template `(def ,'func (x y ,@extra) "pass")))
+\end{lispcode}
+
+\begin{examplebox}[title=Generador de funciones]
+\begin{lispcode}
+(defun make-power-fn (name exp)
+  (write-python-template
+    `(def ,(intern name) (x) "return x ** ,exp")))
+(make-power-fn "cube" 3)
+\end{lispcode}
+\end{examplebox}
+

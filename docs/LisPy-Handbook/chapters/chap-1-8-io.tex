@@ -1,0 +1,50 @@
+\chapter{Entrada/Salida Fundamental}
+\label{chap:io}
+{\huge$\bigstar$} Principiante
+
+\section{La Función Format}
+\begin{lispcode}
+(format t "~A~%" "Hola")
+(format nil "~A + ~A = ~A" 1 2 3)
+(format nil "~D" 42)
+(format nil "~B" 42)
+(format nil "~X" 255)
+(format nil "~5,2F" 3.14159)
+(format nil "~@R" 42)
+\end{lispcode}
+
+\section{Print y Variantes}
+\begin{lispcode}
+(print "Hola") (princ "Hola") (prin1 "Hola") (terpri)
+\end{lispcode}
+
+\section{Lectura}
+\begin{lispcode}
+(let ((x (read))) (format t "Leí: ~A" x))
+(read-line) (read-char) (read-from-string "(+ 1 2)")
+\end{lispcode}
+
+\section{Archivos}
+\begin{lispcode}
+(with-open-file (out "salida.txt" :direction :output :if-exists :supersede)
+  (format out "Hola, archivo~%"))
+(with-open-file (in "entrada.txt" :direction :input)
+  (let ((c (read-line in nil nil))) c))
+\end{lispcode}
+
+\section{Redirección de Streams}
+\begin{lispcode}
+(with-output-to-string (out) (format out "Esto va al string"))
+(with-input-from-string (in "(1 2 3)") (read in))
+\end{lispcode}
+
+\begin{examplebox}[title=Formato tabular]
+\begin{lispcode}
+(defun tabla-cuadrados (&optional (n 10))
+  (format t "~&~@A~20@A~30@A~%" "N" "N^2" "N^3")
+  (dotimes (i n)
+    (let ((x (1+ i)))
+      (format t "~&~D~20@D~30@D~%" x (* x x) (* x x x)))))
+\end{lispcode}
+\end{examplebox}
+

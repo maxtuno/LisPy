@@ -1,0 +1,11 @@
+(defun contains-duplicate (nums)
+  (let ((seen (make-hash-table :test 'eql)))
+    (dolist (x nums)
+      (if (gethash x seen)
+          (return-from contains-duplicate t)
+          (setf (gethash x seen) t)))
+    nil))
+
+(format t "Contains Duplicate:~%")
+(format t "  [1,2,3,1] => ~A~%" (contains-duplicate '(1 2 3 1)))
+(format t "  [1,2,3,4] => ~A~%" (contains-duplicate '(1 2 3 4)))

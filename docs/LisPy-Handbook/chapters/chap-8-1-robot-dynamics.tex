@@ -1,0 +1,40 @@
+\chapter{Dinámica de Robot 2-DOF}
+\label{chap:robot-dynamics}
+{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$} Experto
+
+\section{Ecuaciones de Lagrange}
+\begin{lispcode}
+(py:run "import sympy as sp
+m1,m2,l1,l2,g = sp.symbols('m1 m2 l1 l2 g', positive=True)
+t1,t2 = sp.symbols('theta1 theta2')
+dt1,dt2 = sp.symbols('dtheta1 dtheta2')
+x1 = l1*sp.sin(t1); y1 = -l1*sp.cos(t1)
+x2 = x1 + l2*sp.sin(t1+t2); y2 = y1 - l2*sp.cos(t1+t2)")
+\end{lispcode}
+
+\section{Matriz de Masa M(q)}
+\begin{lispcode}
+(py:run "
+M11 = m1*l1**2 + m2*(l1**2 + l2**2 + 2*l1*l2*sp.cos(t2))
+M12 = m2*(l2**2 + l1*l2*sp.cos(t2))
+M = sp.Matrix([[M11, M12], [M12, m2*l2**2]])")
+\end{lispcode}
+
+\section{Simulación Numérica}
+\begin{lispcode}
+(py:run "from scipy.integrate import solve_ivp; import numpy as np
+def robot_dyn(t, state, m1, m2, l1, l2, g):
+    t1, t2, dt1, dt2 = state
+    M11 = m1*l1**2 + m2*(l1**2+l2**2+2*l1*l2*np.cos(t2))
+    M12 = m2*(l2**2 + l1*l2*np.cos(t2))
+    M = np.array([[M11, M12], [M12, m2*l2**2]])
+    c = m2*l1*l2*np.sin(t2)
+    C = np.array([[-c*dt2, -c*(dt1+dt2)], [c*dt1, 0]])
+    G = np.array([[(m1*l1+m2*l1)*g*np.cos(t1)+m2*l2*g*np.cos(t1+t2)],
+                  [m2*l2*g*np.cos(t1+t2)]])
+    q_ddot = np.linalg.solve(M, -C@np.array([[dt1],[dt2]]) - G)
+    return [dt1, dt2, q_ddot[0,0], q_ddot[1,0]]
+sol = solve_ivp(robot_dyn, [0,10], [np.pi/2,0,0,0],
+                args=(1,1,1,1,9.81), method='RK45', max_step=0.01)")
+\end{lispcode}
+

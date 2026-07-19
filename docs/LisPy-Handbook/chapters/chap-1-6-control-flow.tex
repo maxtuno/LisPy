@@ -1,0 +1,49 @@
+\chapter{Control de Flujo Básico}
+\label{chap:control}
+{\huge$\bigstar$} Principiante
+
+\section{Condicionales}
+\begin{lispcode}
+(if (> x 0) "positivo" "no positivo")
+(when (> x 0) (print "es positivo"))
+(unless (= x 0) (print "x no es cero"))
+\end{lispcode}
+
+\section{Cond}
+\begin{lispcode}
+(cond ((< x 0) "negativo") ((= x 0) "cero") (t "positivo"))
+\end{lispcode}
+
+\section{Case y Typecase}
+\begin{lispcode}
+(case char (#\+ :sumar) (#\- :restar) (otherwise :desconocido))
+\end{lispcode}
+
+\section{Asignación}
+\begin{lispcode}
+(setq x 10)
+(setf (aref v 0) 5)
+(incf x) (decf x)
+(rotatef a b)
+\end{lispcode}
+
+\section{Asignación Paralela}
+\begin{lispcode}
+(psetf a b b a)
+(psetq x 1 y 2)
+\end{lispcode}
+
+\begin{examplebox}[title=Calculadora de tarifas con cond]
+\begin{lispcode}
+(defun tarifa (edad)
+  (cond ((< edad 5) 0) ((< edad 18) 5.0) ((< edad 65) 10.0) (t 7.5)))
+(tarifa 30) (tarifa 70)
+\end{lispcode}
+\end{examplebox}
+
+\begin{examplebox}[title=Intercambio con rotatef]
+\begin{lispcode}
+(let ((a 10) (b 20)) (rotatef a b) (list a b))
+\end{lispcode}
+\end{examplebox}
+

@@ -1,0 +1,35 @@
+\chapter{La Biblioteca \\texttt{python-template.lp}}
+\label{chap:python-template}
+{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$} Avanzado
+
+\section{Visión General}
+\begin{lispcode}
+(load "lib/python-template.lp")
+(write-python-template `(def ,'fib (n) "return fib(n-1) + fib(n-2)"))
+\end{lispcode}
+
+\section{Mapeo de Constructos}
+\begin{tabular}{ll}
+\toprule
+Forma Lisp & Código Python \\
+\midrule
+\texttt{(def name (args) body)} & \texttt{def name(args):\textbackslash\textbackslash indent body} \\
+\texttt{(return expr)} & \texttt{return expr} \\
+\texttt{(if c t e)} & \texttt{if c:\textbackslash\textbackslash indent t\textbackslash\textbackslash else:\textbackslash\textbackslash indent e} \\
+\texttt{(for v in e body)} & \texttt{for v in e:\textbackslash\textbackslash indent body} \\
+\texttt{(:= v e)} & \texttt{v = e} \\
+\texttt{(+ a b)} & \texttt{a + b} \\
+\bottomrule
+\end{tabular}
+
+\begin{examplebox}[title=Generar función factorial]
+\begin{lispcode}
+(write-python-template
+  `(def ,'factorial (n)
+     "result = 1"
+     (for i in (range 1 (+ n 1))
+       (:= result (* result i)))
+     (return result)))
+\end{lispcode}
+\end{examplebox}
+

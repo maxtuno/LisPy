@@ -1,0 +1,284 @@
+{
+  "def": {
+    "prefix": "def",
+    "body": [
+      "def ${1:function_name}(${2:args}):",
+      "\t\"\"\"${3:docstring}\"\"\"",
+      "\t${0:pass}"
+    ],
+    "description": "Python function definition"
+  },
+  "async-def": {
+    "prefix": "adef",
+    "body": [
+      "async def ${1:function_name}(${2:args}):",
+      "\t\"\"\"${3:docstring}\"\"\"",
+      "\t${0:pass}"
+    ],
+    "description": "Async Python function definition"
+  },
+  "class": {
+    "prefix": "class",
+    "body": [
+      "class ${1:ClassName}(${2:object}):",
+      "\t\"\"\"${3:docstring}\"\"\"",
+      "\t${0:pass}"
+    ],
+    "description": "Python class definition"
+  },
+  "if": {
+    "prefix": "if",
+    "body": [
+      "if ${1:condition}:",
+      "\t${0:pass}"
+    ],
+    "description": "If statement"
+  },
+  "if-else": {
+    "prefix": "ife",
+    "body": [
+      "if ${1:condition}:",
+      "\t${2:pass}",
+      "else:",
+      "\t${0:pass}"
+    ],
+    "description": "If/else statement"
+  },
+  "if-elif-else": {
+    "prefix": "ifel",
+    "body": [
+      "if ${1:condition}:",
+      "\t${2:pass}",
+      "elif ${3:condition}:",
+      "\t${4:pass}",
+      "else:",
+      "\t${0:pass}"
+    ],
+    "description": "If/elif/else statement"
+  },
+  "for": {
+    "prefix": "for",
+    "body": [
+      "for ${1:item} in ${2:iterable}:",
+      "\t${0:pass}"
+    ],
+    "description": "For loop"
+  },
+  "for-range": {
+    "prefix": "forr",
+    "body": [
+      "for ${1:i} in range(${2:n}):",
+      "\t${0:pass}"
+    ],
+    "description": "For loop with range"
+  },
+  "for-enumerate": {
+    "prefix": "fore",
+    "body": [
+      "for ${1:i}, ${2:item} in enumerate(${3:iterable}):",
+      "\t${0:pass}"
+    ],
+    "description": "For loop with enumerate"
+  },
+  "while": {
+    "prefix": "while",
+    "body": [
+      "while ${1:condition}:",
+      "\t${0:pass}"
+    ],
+    "description": "While loop"
+  },
+  "try-except": {
+    "prefix": "try",
+    "body": [
+      "try:",
+      "\t${1:pass}",
+      "except ${2:Exception} as ${3:e}:",
+      "\t${0:pass}"
+    ],
+    "description": "Try/except block"
+  },
+  "try-except-else": {
+    "prefix": "trye",
+    "body": [
+      "try:",
+      "\t${1:pass}",
+      "except ${2:Exception} as ${3:e}:",
+      "\t${4:pass}",
+      "else:",
+      "\t${0:pass}"
+    ],
+    "description": "Try/except/else block"
+  },
+  "try-except-finally": {
+    "prefix": "tryf",
+    "body": [
+      "try:",
+      "\t${1:pass}",
+      "except ${2:Exception} as ${3:e}:",
+      "\t${4:pass}",
+      "finally:",
+      "\t${0:pass}"
+    ],
+    "description": "Try/except/finally block"
+  },
+  "with": {
+    "prefix": "with",
+    "body": [
+      "with ${1:expression} as ${2:var}:",
+      "\t${0:pass}"
+    ],
+    "description": "With statement (context manager)"
+  },
+  "import": {
+    "prefix": "imp",
+    "body": [
+      "import ${1:module}$0"
+    ],
+    "description": "Import module"
+  },
+  "from-import": {
+    "prefix": "fim",
+    "body": [
+      "from ${1:module} import ${2:name}$0"
+    ],
+    "description": "From import"
+  },
+  "print": {
+    "prefix": "pr",
+    "body": [
+      "print(${1:value})$0"
+    ],
+    "description": "Print statement"
+  },
+  "list-comprehension": {
+    "prefix": "lc",
+    "body": [
+      "[${1:expression} for ${2:item} in ${3:iterable}]$0"
+    ],
+    "description": "List comprehension"
+  },
+  "dict-comprehension": {
+    "prefix": "dc",
+    "body": [
+      "{${1:key}: ${2:value} for ${3:item} in ${4:iterable}}$0"
+    ],
+    "description": "Dict comprehension"
+  },
+  "set-comprehension": {
+    "prefix": "sc",
+    "body": [
+      "{${1:expression} for ${2:item} in ${3:iterable}}$0"
+    ],
+    "description": "Set comprehension"
+  },
+  "lambda": {
+    "prefix": "lam",
+    "body": [
+      "lambda ${1:args}: ${2:expression}$0"
+    ],
+    "description": "Lambda function"
+  },
+  "main": {
+    "prefix": "main",
+    "body": [
+      "if __name__ == '__main__':",
+      "\t${0:pass}"
+    ],
+    "description": "Main entry point guard"
+  },
+  "property": {
+    "prefix": "prop",
+    "body": [
+      "@property",
+      "def ${1:name}(self):",
+      "\t\"\"\"${2:docstring}\"\"\"",
+      "\treturn self._${1:name}",
+      "",
+      "@${1:name}.setter",
+      "def ${1:name}(self, value):",
+      "\tself._${1:name} = value$0"
+    ],
+    "description": "Python property with getter/setter"
+  },
+  "docstring": {
+    "prefix": "\"\"\"",
+    "body": [
+      "\"\"\"${1:docstring}\"\"\"$0"
+    ],
+    "description": "Triple-quoted docstring"
+  },
+  "lisp-defun": {
+    "prefix": "defun",
+    "body": [
+      "(defun ${1:name} (${2:args})",
+      "  \"${3:docstring}\"",
+      "  ${0:body})"
+    ],
+    "description": "Common Lisp function definition"
+  },
+  "lisp-defmacro": {
+    "prefix": "defmacro",
+    "body": [
+      "(defmacro ${1:name} (${2:args})",
+      "  \"${3:docstring}\"",
+      "  ${0:body})"
+    ],
+    "description": "Common Lisp macro definition"
+  },
+  "lisp-defvar": {
+    "prefix": "defvar",
+    "body": [
+      "(defvar *${1:name}* ${0:value})"
+    ],
+    "description": "Common Lisp variable definition"
+  },
+  "lisp-let": {
+    "prefix": "let",
+    "body": [
+      "(let ((${1:var} ${2:value}))",
+      "  ${0:body})"
+    ],
+    "description": "Common Lisp let binding"
+  },
+  "lisp-lambda": {
+    "prefix": "lambdal",
+    "body": [
+      "(lambda (${1:args})",
+      "  ${0:body})"
+    ],
+    "description": "Common Lisp lambda"
+  },
+  "lisp-if": {
+    "prefix": "ifl",
+    "body": [
+      "(if ${1:test}",
+      "    ${2:then}",
+      "    ${0:else})"
+    ],
+    "description": "Common Lisp if expression"
+  },
+  "lisp-cond": {
+    "prefix": "condl",
+    "body": [
+      "(cond ((${1:test}) ${2:body})",
+      "      ${0:(t nil)})"
+    ],
+    "description": "Common Lisp cond expression"
+  },
+  "lisp-loop": {
+    "prefix": "loop",
+    "body": [
+      "(loop for ${1:item} in ${2:list}",
+      "      ${0:do (print ${1:item})})"
+    ],
+    "description": "Common Lisp loop"
+  },
+  "lisp-format": {
+    "prefix": "format",
+    "body": [
+      "(format t \"${1:fmt}\" ${2:args})$0"
+    ],
+    "description": "Common Lisp format output"
+  }
+}

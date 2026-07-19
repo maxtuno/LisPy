@@ -1,0 +1,6 @@
+(defvar *fib-cache* (make-hash-table :test 'eql))
+(defun fib-fast (n)
+  (or (gethash n *fib-cache*)
+      (setf (gethash n *fib-cache*)
+            (if (< n 2) n (+ (fib-fast (- n 1)) (fib-fast (- n 2)))))))
+(fib-fast 100)

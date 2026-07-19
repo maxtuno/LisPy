@@ -1,0 +1,81 @@
+\chapter{Epílogo: El Camino por Delante}
+\label{chap:epilogue}
+
+Hemos recorrido juntos un largo camino: desde los átomos más elementales de Lisp hasta la integración más profunda con el ecosistema Python, pasando por CLOS, macros, metaprogramación, matemáticas simbólicas y numéricas, machine learning, visualización, y la ingeniería de un sistema híbrido completo.
+
+\section{Lo que Has Aprendido}
+
+\begin{itemize}
+\item El núcleo de Common Lisp: funciones, macros, CLOS, condiciones, streams, y el sistema de paquetes.
+
+\item El puente Python: cómo LisPy incrusta CPython 3.14 y permite la comunicación bidireccional entre ambos mundos.
+
+\item Programación híbrida: `defmath`, `numpy-fast`, `sympy-bridge`, `pandas-bridge`, y las herramientas que hacen de LisPy un lenguaje único para la ciencia de datos.
+
+\item Meta-programación: macros de lectura, transformación de AST, `pythonic`, quasiquoting, y la generación de código Python desde Lisp.
+
+\item Matemáticas aplicadas: cálculo simbólico con SymPy, álgebra lineal con NumPy, optimización con SciPy, y visualización.
+
+\item Ingeniería de sistemas: compilación FASL, CLI, distribución, pruebas, kernel Jupyter, y despliegue.
+
+\item Integración con herramientas modernas: Jupyter Notebook/Lab, VS Code, sintaxis híbrida Lisp/Python.
+
+\item Estudios de caso: robot 2-DOF, trading algorítmico, procesamiento de imágenes, chatbots, y migración de proyectos Python.
+\end{itemize}
+
+\section{Proyectos Recomendados}
+
+Para continuar tu aprendizaje, aquí hay algunos proyectos que puedes abordar con LisPy:
+
+\begin{enumerate}
+\item \textbf{Jupyter Notebooks de análisis}: Crea notebooks interactivos que mezclen Lisp y Python para exploración de datos, machine learning, y matemáticas simbólicas. Ver \texttt{jupyter/projects/} para ejemplos completos.
+
+\item \textbf{Extensión VS Code para LisPy}: Mejora el resaltado de sintaxis, agrega snippets, y completa la integración con el depurador.
+
+\item \textbf{Motor de reglas de negocio}: Usa CLOS y condiciones para modelar un sistema experto con reglas, hechos, y encadenamiento hacia adelante/hacia atrás.
+
+\item \textbf{Visualizador de datos en tiempo real}: Conecta LisPy con un feed de datos (WebSocket, API REST) y actualiza gráficos matplotlib en vivo.
+
+\item \textbf{Compilador de DSL}: Diseña un lenguaje de dominio específico usando macros de lectura y tradúcelo a Python o SQL.
+
+\item \textbf{Orquestador de pipelines de ML}: Usa `pandas-bridge` y `defnp` para crear un pipeline completo de machine learning desde LisPy.
+\end{enumerate}
+
+\section{Hacia Dónde va LisPy}
+
+El desarrollo de LisPy continúa. Las áreas de enfoque futuro incluyen:
+
+\begin{itemize}
+\item \textbf{Paralelismo y concurrencia}: Hilos Lisp con GIL administrado, canales de comunicación, y actores al estilo Erlang.
+
+\item \textbf{Compilación JIT}: Integración con Numba y PyPy para aceleración dinámica de código Lisp.
+
+\item \textbf{Depuración visual}: Un depurador gráfico que muestre la pila Lisp, los frames de Python, y las transformaciones de macros en tiempo real.
+
+\item \textbf{Ecosistema de paquetes}: Un gestor de paquetes Lisp con resolución de dependencias, versionado semántico, y repositorio centralizado.
+
+\item \textbf{Soporte móvil y web}: Compilación a WebAssembly para ejecutar LisPy en el navegador.
+
+\item \textbf{CLOS ↔ Python nativo}: Sincronización automática de clases entre ambos sistemas con herencia cruzada completa.
+\end{itemize}
+
+\section{Últimas Palabras}
+
+LisPy no es solo un lenguaje de programación: es un puente entre dos filosofías. Lisp te da el poder de la metaprogramación, la expresividad de las macros, y la elegancia del código como datos. Python te da el ecosistema más rico de bibliotecas científicas, la accesibilidad, y la comunidad más grande del mundo.
+
+Juntos, son más que la suma de sus partes.
+
+*"It is not Lisp. It is not Python. It is LisPy."*
+
+\begin{center}
+\vspace{2cm}
+\textcolor{lispblue}{\large O. Riveros}
+\end{center}
+
+\section{Colofón}
+
+Este libro fue compuesto con XeLaTeX usando la clase \texttt{lispy-book}, diseñada específicamente para esta obra. La tipografía principal es TeX Gyre Pagella, las fuentes monoespaciadas son Inconsolatazi4, y las sans-serif son TeX Gyre Heros.
+
+Los diagramas fueron creados con \textsc{Pgfplots} y \textsc{TikZ}. Los ejemplos de código fueron extraídos de los archivos fuente de LisPy y verificados contra el intérprete.
+
+\endinput

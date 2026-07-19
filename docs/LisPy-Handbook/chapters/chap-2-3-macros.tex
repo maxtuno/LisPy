@@ -1,0 +1,53 @@
+\chapter{Macros: Metaprogramación en Tiempo de Compilación}
+\label{chap:macros}
+{\huge$\bigstar$}{\huge$\bigstar$} Intermedio
+
+\section{Sintaxis Básica}
+\begin{lispcode}
+(defmacro macro-name (&rest args) cuerpo-de-expansión)
+\end{lispcode}
+
+\section{Quasiquoting}
+\begin{lispcode}
+(defmacro suma-cuadrados (a b) `(+ (* ,a ,a) (* ,b ,b)))
+(macroexpand-1 '(suma-cuadrados 3 4))
+\end{lispcode}
+
+\section{Higiene con Gensym}
+\begin{lispcode}
+(defmacro con-temp ((var valor) &body body)
+  (let ((g (gensym)))
+    `(let ((,g ,valor)) (let ((,var ,g)) ,@body))))
+\end{lispcode}
+
+\section{Macro Anafórica}
+\begin{lispcode}
+(defmacro aif (test then &optional else)
+  `(let ((it ,test)) (if it ,then ,else)))
+\end{lispcode}
+
+\section{Compilador Macros}
+\begin{lispcode}
+(defun cuadrado (x) (* x x))
+(define-compiler-macro cuadrado (x)
+  (if (numberp x) `(* ,x ,x) `(cuadrado ,x)))
+\end{lispcode}
+
+\begin{examplebox}[title=Macro while personalizada]
+\begin{lispcode}
+(defmacro while (test &body body)
+  `(do () ((not ,test)) ,@body))
+(let ((x 5) (result nil))
+  (while (> x 0) (push x result) (decf x))
+  (nreverse result))
+\end{lispcode}
+\end{examplebox}
+
+\begin{examplebox}[title=Destructuring con with-coords]
+\begin{lispcode}
+(defmacro with-coords ((x y) point &body body)
+  `(let ((,x (car ,point)) (,y (cadr ,point))) ,@body))
+(with-coords (a b) '(10 20) (+ a b))
+\end{lispcode}
+\end{examplebox}
+

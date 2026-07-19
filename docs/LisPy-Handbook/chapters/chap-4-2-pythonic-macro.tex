@@ -1,0 +1,29 @@
+\chapter{El Macro \\texttt{pythonic}}
+\label{chap:pythonic}
+{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$} Avanzado
+
+\section{Uso Básico}
+\begin{lispcode}
+(pythonic (def factorial (n)
+            (if (<= n 1) (return 1)
+              (return (* n (factorial (- n 1)))))))
+\end{lispcode}
+
+\section{Flujo de Control}
+\begin{lispcode}
+(pythonic (for i in (range 5) (print (* i i))))
+\end{lispcode}
+
+\begin{examplebox}[title=Project Euler \\ \#1 con pythonic]
+\begin{lispcode}
+(let ((result (pythonic
+                (def euler-1 (n)
+                  (:= total 0)
+                  (for i in (range n)
+                    (if (or (== (% i 3) 0) (== (% i 5) 0))
+                      (:= total (+ total i))))
+                  (return total)))))
+  (funcall result 1000))
+\end{lispcode}
+\end{examplebox}
+

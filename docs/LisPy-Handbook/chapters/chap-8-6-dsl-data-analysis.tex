@@ -1,0 +1,35 @@
+\chapter{DSL para Análisis de Datos}
+\label{chap:dsl-data-analysis}
+{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$} Experto
+
+\section{Sintaxis del DSL}
+\begin{lispcode}
+(query (select :name :age) (from users) (where (> age 18)) (order-by age) (limit 10))
+\end{lispcode}
+
+\section{Macro query}
+\begin{lispcode}
+(defmacro query (&body clauses)
+  (let ((select nil) (from nil) (where nil) (order nil) (limit nil))
+    (dolist (clause clauses)
+      (case (car clause)
+        (select (setf select (cdr clause)))
+        (from (setf from (cadr clause)))
+        (where (setf where (cadr clause)))
+        (order-by (setf order (cdr clause)))
+        (limit (setf limit (cadr clause)))))
+    `(execute-query ',select ',from ',where ',order ',limit)))
+\end{lispcode}
+
+\section{Ejecución con Pandas}
+\begin{lispcode}
+(defun execute-query (fields table condition order limit)
+  (let ((df (pandas-read-csv (format nil "~A.csv" table))))
+    (when fields (setf df (pandas-select df fields)))
+    (when condition (setf df (pandas-filter df (lambda (row)
+                      (eval-condition condition row)))))
+    (when order (setf df (pandas-sort df order)))
+    (when limit (setf df (pandas-head df limit)))
+    df))
+\end{lispcode}
+

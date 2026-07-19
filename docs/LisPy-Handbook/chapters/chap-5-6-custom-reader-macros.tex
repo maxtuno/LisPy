@@ -1,0 +1,24 @@
+\chapter{Macros de Lectura Personalizadas}
+\label{chap:custom-reader}
+{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$} Experto
+
+\section{Tabla de Dispatch de \#}
+Por defecto: \texttt{\#'}, \texttt{\#(}, \texttt{\#\{}, \texttt{\#|},
+\texttt{\#\textbackslash}, \texttt{\#:}, \texttt{\#C}, \texttt{\#\_}.
+
+\section{Extensión del Lector}
+La macro \texttt{\#\_} es el ejemplo canónico de extensión del lector
+implementada en C.
+
+\begin{lispcode}
+\#_math:pi           ;; → 3.14159...
+(\#_math:sqrt 144)   ;; → 12.0
+\#_os:path:join
+\end{lispcode}
+
+\begin{examplebox}[title=DSL conceptual para matrices]
+\begin{lispcode}
+;; \#[1 2 3; 4 5 6]  →  numpy.array([[1,2,3],[4,5,6]])
+\end{lispcode}
+\end{examplebox}
+

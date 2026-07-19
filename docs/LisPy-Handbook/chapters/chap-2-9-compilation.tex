@@ -1,0 +1,41 @@
+\chapter{Compilación y Carga}
+\label{chap:compilation}
+{\huge$\bigstar$}{\huge$\bigstar$} Intermedio
+
+\section{Compilación}
+\begin{lispcode}
+(defun fib (n) (if (< n 2) n (+ (fib (- n 1)) (fib (- n 2)))))
+(compile 'fib)
+(time (fib 30))
+\end{lispcode}
+
+\section{Archivos}
+\begin{verbatim}
+lispy.exe -c programa.lp   # → programa.fasl
+lispy.exe programa.fasl
+\end{verbatim}
+
+\section{Carga}
+\begin{lispcode}
+(load "programa.lp")
+(load "programa.fasl")
+(provide :mi-modulo)
+(require :mi-modulo)
+\end{lispcode}
+
+\section{Evaluación}
+\begin{lispcode}
+(eval '(+ 1 2))
+(eval-when (:compile-toplevel :load-toplevel :execute) (print "inicializando"))
+\end{lispcode}
+
+\begin{examplebox}[title=Benchmark antes/después de compile]
+\begin{lispcode}
+(defun suma-cuadrados (n)
+  (let ((sum 0)) (dotimes (i n) (incf sum (* i i))) sum))
+(time (suma-cuadrados 1000000))
+(compile 'suma-cuadrados)
+(time (suma-cuadrados 1000000))
+\end{lispcode}
+\end{examplebox}
+

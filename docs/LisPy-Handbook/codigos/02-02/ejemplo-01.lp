@@ -1,0 +1,7 @@
+(intern "FOO")
+(make-symbol "FOO")
+(gensym "TEMP")
+(symbol-name 'foo)
+(symbol-package 'foo)
+(boundp 'x)
+(fboundp 'car)

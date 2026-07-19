@@ -1,0 +1,67 @@
+\chapter{Referencia CLOS}
+\label{app:clos}
+
+\section*{Definición de Clase}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Opciones de slot} & \textbf{Descripción} \\
+\midrule
+\texttt{:initarg} & Keyword de inicialización \\
+\texttt{:initform} & Valor por defecto \\
+\texttt{:accessor} & Crea getter y setter \\
+\texttt{:reader} & Crea getter \\
+\texttt{:writer} & Crea setter \\
+\texttt{:allocation :instance} & Slot por instancia (defecto) \\
+\texttt{:allocation :class} & Slot compartido \\
+\texttt{:documentation} & Documentación \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section*{Combinación de Métodos}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Cualificador} & \textbf{Orden de ejecución} \\
+\midrule
+\texttt{:around} & Primero (más específico primero) \\
+\texttt{:before} & Segundo (más específico primero) \\
+\emph{primario} & Tercero \\
+\texttt{:after} & Cuarto (más específico último) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section*{Funciones Genéricas}
+
+\begin{lispcode}
+(defgeneric fn-name (param1 param2 ...)
+  (:documentation "doc")
+  (:method (param1 param2 ...) body)
+  (:method :around ((p1 class1) p2) body))
+\end{lispcode}
+
+\section*{Metaclase}
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Función} & \textbf{Descripción} \\
+\midrule
+\texttt{class-of} & Clase de un objeto \\
+\texttt{find-class} & Buscar clase por nombre \\
+\texttt{class-name} & Nombre de la clase \\
+\texttt{class-direct-superclasses} & Superclases directas \\
+\texttt{class-precedence-list} & CPL completa \\
+\texttt{class-slots} & Slots de la clase \\
+\texttt{class-direct-slots} & Slots directos \\
+\texttt{method-qualifiers} & Cualificadores del método \\
+\texttt{method-generic-function} & GF del método \\
+\texttt{generic-function-methods} & Métodos de la GF \\
+\bottomrule
+\end{tabular}
+\end{center}
+

@@ -1,0 +1,63 @@
+\chapter{Cómo Leer Este Libro}
+\label{chap:howtoread}
+
+Este libro está organizado en capas: cada parte presupone el conocimiento de
+las anteriores. Sin embargo, hemos marcado capítulos autocontenidos para
+lectura no lineal.
+
+\section{Notación y Convenciones}
+
+Utilizamos las siguientes convenciones tipográficas:
+
+\begin{itemize}
+\item \texttt{\color{keywordblue} código Lisp} -- fragmentos de código
+  Common Lisp en el intérprete LisPy.
+\item \texttt{\color{keywordblue} código Python} -- fragmentos de código
+  Python ejecutables desde LisPy.
+\item \textbf{texto en negrita} -- términos nuevos o conceptos clave.
+\item \textit{texto en cursiva} -- énfasis o referencias cruzadas.
+\end{itemize}
+
+\section{Símbolos de Dificultad}
+
+Cada capítulo está marcado con estrellas que indican su nivel:
+
+\begin{itemize}
+\item $\bigstar$\!$\bigstar$\!$\bigstar$\!$\bigstar$ -- \textbf{Principiante.}
+  No se requiere experiencia previa en Lisp ni Python.
+\item $\bigstar$\!$\bigstar$\!$\bigstar$\!$\bigstar$ -- \textbf{Intermedio.}
+  Presupone fundamentos de programación.
+\item $\bigstar$\!$\bigstar$\!$\bigstar$\!$\bigstar$ -- \textbf{Avanzado.}
+  Requiere comprensión de los conceptos presentados en partes anteriores.
+\item $\bigstar$\!$\bigstar$\!$\bigstar$\!$\bigstar$ -- \textbf{Experto.}
+  Material avanzado que presupone dominio de las secciones precedentes.
+\end{itemize}
+
+\section{Ejecución de Ejemplos}
+
+Los ejemplos de código pueden ejecutarse de tres formas:
+
+\begin{enumerate}
+\item \textbf{Línea de comandos:} \texttt{lispy.exe ejemplo.lp}
+\item \textbf{REPL interactivo:} \texttt{lispy.exe --repl}
+\item \textbf{Evaluación directa:} \texttt{lispy.exe -e "(+ 1 2)"}
+\end{enumerate}
+
+\section{Dónde Encontrar el Código Fuente}
+
+El código fuente de todas las librerías discutidas en el libro reside en el
+directorio \texttt{lib/} de la distribución de LisPy:
+
+\begin{itemize}
+\item \texttt{lib/python-template.lp} -- generación de código Python
+\item \texttt{lib/pythonic.lp} -- macro de transformación Lisp a Python
+\item \texttt{lib/defpyfun.lp} -- funciones Python con captura Lisp
+\item \texttt{lib/numpy-fast.lp} -- aceleración numérica vectorizada
+\item \texttt{lib/defnp.lp} -- despacho automático vectorizado/escalar
+\item \texttt{lib/sympy-bridge.lp} -- cálculo simbólico con SymPy
+\item \texttt{lib/defmath.lp} -- matemáticas híbridas simbólico-numéricas
+\item \texttt{lib/persist.lp} -- checkpoint/restore de sesión
+\item \texttt{lib/continuations.lp} -- puente de corutinas
+\item \texttt{lib/import-hooks.lp} -- transformación de AST
+\item \texttt{lib/pandas-bridge.lp} -- DataFrames desde Lisp
+\end{itemize}

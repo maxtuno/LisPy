@@ -1,0 +1,35 @@
+\chapter{Rendimiento y Optimización del Puente}
+\label{chap:performance}
+{\huge$\bigstar$}{\huge$\bigstar$} Intermedio
+
+\section{Overhead de py:call}
+\begin{enumerate}
+\item GIL acquire/release ($\sim\mu$s)
+\item Conversión Lisp $\to$ Python
+\item Conversión Python $\to$ Lisp
+\item Refcounting
+\end{enumerate}
+
+\section{Regla Práctica}
+\textbf{$<$ 1 000 llamadas:} insignificante.
+
+\textbf{$>$ 10 000 llamadas:} usar \texttt{py:run} por lotes.
+
+\section{Modos de Uso}
+\paragraph{Modo 1: Lisp Nativo + Python Puntual}
+Control en Lisp, Python para operaciones específicas.
+
+\paragraph{Modo 2: Python Delegado}
+\texttt{py:run} para bloques intensivos.
+
+\paragraph{Modo 3: VALUE\_PYTHON Directo}
+Llamada directa a callable, sin \texttt{py:call}.
+
+\begin{examplebox}[title=Benchmark comparativo]
+\begin{lispcode}
+(defun test-pycall ()
+  (let ((s (py:attr (py:import "math") "sqrt")))
+    (time (dotimes (i 10000) (s (float i))))))
+\end{lispcode}
+\end{examplebox}
+

@@ -1,0 +1,31 @@
+\chapter{Callbacks Lisp $\rightarrow$ Python}
+\label{chap:callbacks}
+{\huge$\bigstar$}{\huge$\bigstar$} Intermedio
+
+\section{Registro}
+\begin{lispcode}
+(defun mi-funcion (x) (* x 2))
+(py:register-callback 'mi-funcion)
+\end{lispcode}
+
+Una vez registrada, invocable desde Python como \texttt{mi\_funcion\_cb}.
+
+\section{Mecanismo}
+
+Crea una función Python en \texttt{builtins}. Cuando Python la invoca,
+los argumentos se almacenan para procesamiento por Lisp.
+
+\section{Limitaciones}
+\begin{itemize}
+\item Solo funciones de ámbito global.
+\item Comunicación semisíncrona.
+\end{itemize}
+
+\begin{examplebox}[title=Callback de descuento]
+\begin{lispcode}
+(defun descuento (p) (* p 0.9))
+(py:register-callback 'descuento)
+(py:run "from builtins import descuento_cb; print(descuento_cb(100))")
+\end{lispcode}
+\end{examplebox}
+

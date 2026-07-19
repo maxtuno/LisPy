@@ -1,0 +1,32 @@
+\chapter{\texttt{numpy-fast.lp}: Aceleración Numérica}
+\label{chap:numpy-fast}
+{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$} Avanzado
+
+\section{Creación de Arrays}
+\begin{lispcode}
+(load "lib/numpy-fast.lp")
+(defvar *arr* (numpy-array '(1 2 3 4 5)))
+(defvar *r* (numpy-arange 0 10 2))
+(defvar *z* (numpy-linspace 0 1 5))
+(defvar *zeros* (numpy-zeros 5))
+\end{lispcode}
+
+\section{Operaciones Vectorizadas}
+\begin{lispcode}
+(numpy-sin arr) (numpy-cos arr) (numpy-exp arr)
+(numpy-log arr) (numpy-sqrt arr) (numpy-pow arr 2)
+\end{lispcode}
+
+\section{Reducciones}
+\begin{lispcode}
+(numpy-sum arr) (numpy-mean arr) (numpy-sum arr 0)
+\end{lispcode}
+
+\begin{examplebox}[title=Linspace para dominio de evaluación]
+\begin{lispcode}
+(let ((x (numpy-linspace 0 (* 2 pi) 1000))
+      (y (numpy-sin x)))
+  (numpy-sum y))
+\end{lispcode}
+\end{examplebox}
+

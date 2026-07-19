@@ -1,0 +1,5 @@
+(defgeneric tax-rate (country))
+(defmethod tax-rate ((country (eql :us))) 0.15)
+(defmethod tax-rate ((country (eql :uk))) 0.20)
+(defmethod tax-rate (country) 0.25)
+(assert (= (tax-rate :us) 0.15))

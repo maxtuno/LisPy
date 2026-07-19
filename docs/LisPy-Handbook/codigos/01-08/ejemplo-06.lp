@@ -1,0 +1,5 @@
+(defun tabla-cuadrados (&optional (n 10))
+  (format t "~&~@A~20@A~30@A~%" "N" "N^2" "N^3")
+  (dotimes (i n)
+    (let ((x (1+ i)))
+      (format t "~&~D~20@D~30@D~%" x (* x x) (* x x x)))))

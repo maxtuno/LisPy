@@ -1,0 +1,20 @@
+\chapter{\texttt{persist.lp}: Checkpoint/Restore}
+\label{chap:persist}
+{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$} Avanzado
+
+\section{Guardar Sesión}
+\begin{lispcode}
+(load "lib/persist.lp")
+(py:run "x = 42; import numpy; arr = numpy.array([1,2,3])")
+(py:save-session "mi-sesion.txt")
+\end{lispcode}
+
+\section{Cargar Sesión}
+\begin{lispcode}
+(py:load-session "mi-sesion.txt")
+\end{lispcode}
+
+\section{Mecanismo}
+Serializa con pickle, codifica en hexadecimal, excluye variables privadas.
+Objetos no pickleables se omiten.
+

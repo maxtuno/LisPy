@@ -1,0 +1,38 @@
+\chapter{\texttt{sympy-bridge.lp}: Cálculo Simbólico}
+\label{chap:sympy-bridge}
+{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$} Avanzado
+
+\begin{lispcode}
+(load "lib/sympy-bridge.lp")
+(defvar *x* (sympy-symbol "x"))
+(defvar *expr* (sympy-expr '(+ (expt x 2) (* 3 x) 1)))
+\end{lispcode}
+
+\section{Derivación}
+\begin{lispcode}
+(sympy-derive *expr* *x*)  ;; → 2*x + 3
+\end{lispcode}
+
+\section{Integración}
+\begin{lispcode}
+(sympy-integrate *expr* *x*)  ;; → x**3/3 + 3*x**2/2 + x
+\end{lispcode}
+
+\section{Simplificación}
+\begin{lispcode}
+(sympy-simplify (sympy-expr '(+ (expt (sin x) 2) (expt (cos x) 2))))
+\end{lispcode}
+
+\section{LaTeX}
+\begin{lispcode}
+(sympy-latex *expr*)
+\end{lispcode}
+
+\begin{examplebox}[title=Derivada de polinomio]
+\begin{lispcode}
+(let* ((x (sympy-symbol "x"))
+       (expr (sympy-expr '(+ (expt x 3) (* 2 (expt x 2)) (* 5 x) 7))))
+  (sympy-derive expr x))
+\end{lispcode}
+\end{examplebox}
+

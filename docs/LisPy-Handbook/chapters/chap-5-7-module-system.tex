@@ -1,0 +1,33 @@
+\chapter{Sistema de Módulos y Dependencias}
+\label{chap:module-system}
+{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$} Experto
+
+\begin{lispcode}
+(provide :mi-libreria)
+(require :mi-libreria)
+(load "lib/defmath.lp")
+\end{lispcode}
+
+\section{Dependencias}
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Librería & Depende de \\
+\midrule
+python-template.lp & (ninguna) \\
+defpyfun.lp & python-template \\
+numpy-fast.lp & numpy \\
+sympy-bridge.lp & sympy \\
+defmath.lp & numpy-fast, sympy-bridge \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Inicialización Lazy}
+\begin{lispcode}
+(defvar *numpy-init* nil)
+(defun numpy-array (data)
+  (unless *numpy-init* (setf *numpy-init* t) (py:import "numpy"))
+  ...)
+\end{lispcode}
+

@@ -1,0 +1,5 @@
+(defclass point-2d () ((x :initarg :x) (y :initarg :y)))
+(defclass point-3d (point-2d) ((z :initarg :z :initform 0)))
+(let ((p (make-instance 'point-2d :x 1 :y 2)))
+  (change-class p 'point-3d)
+  (list (px p) (py p) (pz p)))

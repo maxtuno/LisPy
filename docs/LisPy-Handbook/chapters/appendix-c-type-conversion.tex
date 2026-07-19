@@ -1,0 +1,58 @@
+\chapter{Tabla Completa de Conversión de Tipos}
+\label{app:type-conversion}
+
+\section*{Lisp → Python}
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+\textbf{Tipo Lisp} & \textbf{Tipo Python} & \textbf{Código C} \\
+\midrule
+\texttt{nil} & \texttt{None} & \texttt{Py\_None} \\
+\texttt{t} & \texttt{True} & \texttt{Py\_True} \\
+\texttt{VALUE\_INT} (bigint) & \texttt{int} & \texttt{PyLong\_FromString} \\
+\texttt{VALUE\_FLOAT} & \texttt{float} & \texttt{PyFloat\_FromDouble} \\
+\texttt{VALUE\_COMPLEX} & \texttt{complex} & \texttt{PyComplex\_FromDoubles} \\
+\texttt{VALUE\_STRING} & \texttt{str} & \texttt{PyUnicode\_FromString} \\
+\texttt{VALUE\_CHAR} & \texttt{str} (len 1) & \texttt{PyUnicode\_FromString} \\
+\texttt{VALUE\_SYMBOL} & \texttt{str} & nombre del símbolo \\
+\texttt{VALUE\_LIST} & \texttt{list} & conversion recursiva \\
+\texttt{VALUE\_VECTOR} & \texttt{list} & conversion recursiva \\
+\texttt{VALUE\_HASH\_TABLE} & \texttt{dict} & conversion recursiva \\
+\texttt{VALUE\_PYTHON} & \texttt{PyObject*} & refcount++ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section*{Python → Lisp}
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+\textbf{Tipo Python} & \textbf{Tipo Lisp} & \textbf{Notas} \\
+\midrule
+\texttt{None} & \texttt{nil} & \\
+\texttt{True} & \texttt{t} & \\
+\texttt{False} & \texttt{nil} & \\
+\texttt{int} & \texttt{VALUE\_INT} & precisión arbitraria \\
+\texttt{float} & \texttt{VALUE\_FLOAT} & \\
+\texttt{complex} & \texttt{VALUE\_COMPLEX} & \\
+\texttt{str} & \texttt{VALUE\_STRING} & UTF-8 \\
+\texttt{bytes} & \texttt{VALUE\_PYTHON} & no se convierte automáticamente \\
+\texttt{list} & \texttt{VALUE\_LIST} & \\
+\texttt{tuple} & \texttt{VALUE\_LIST} & \\
+\texttt{dict} & \texttt{VALUE\_HASH\_TABLE} & test equal \\
+\texttt{set/frozenset} & \texttt{VALUE\_PYTHON} & \\
+\texttt{callable}, class, module & \texttt{VALUE\_PYTHON} & objeto opaco \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section*{Tipos NO Convertibles}
+
+\begin{itemize}
+\item \texttt{VALUE\_RATIO} (fracciones): debe convertirse a float primero
+\item \texttt{VALUE\_PATHNAME}: sin equivalente en Python
+\item Objetos Python no pickleables: generadores, sockets, file handles
+\end{itemize}
+

@@ -1,0 +1,23 @@
+\chapter{Pruebas y Metodología}
+\label{chap:testing}
+{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$} Experto
+
+\section{Smoke Test}
+\begin{lispcode}
+;; quick_test.lp
+(handler-case (/ 1 0) (division-by-zero (c) (format t "OK~%" c)))
+(handler-bind ((warning #'(lambda (c) (format t "OK~%")))) (warn "test"))
+\end{lispcode}
+
+\section{Suite de Regresión}
+Problemas 001--120 como tests. Cada uno es un archivo .lp autoejecutable.
+
+\section{Ejemplo: Test BUG-001}
+\begin{lispcode}
+(defgeneric tax-rate (country))
+(defmethod tax-rate ((country (eql :us))) 0.15)
+(defmethod tax-rate ((country (eql :uk))) 0.20)
+(defmethod tax-rate (country) 0.25)
+(assert (= (tax-rate :us) 0.15))
+\end{lispcode}
+

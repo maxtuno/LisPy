@@ -1,0 +1,22 @@
+\chapter{Integración Continua}
+\label{chap:ci-release}
+{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$} Experto
+
+\section{Workflow}
+\begin{enumerate}
+\item Configure (CMake)
+\item Build (Ninja)
+\item Test (quick\_test.lp + regresión)
+\item Package (NSIS)
+\item Release (GitHub Releases)
+\end{enumerate}
+
+\section{Versionado Semántico}
+\texttt{Major.Minor.Patch}.
+\begin{verbatim}
+cmake -S . -B build -G Ninja -DLISPY_PYTHON=ON
+cmake --build build
+ctest --test-dir build
+cpack --config build/CPackConfig.cmake
+\end{verbatim}
+

@@ -1,0 +1,118 @@
+% !TEX encoding = UTF-8 Unicode
+\chapter{Sintaxis Híbrida Lisp/Python}
+\label{chap:hybrid-syntax}
+{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$} Avanzado
+
+LisPy permite escribir archivos \texttt{.lp} que mezclan Lisp y Python en un mismo
+archivo, sin necesidad de \texttt{py:run} explícito. El preprocesador híbrido separa
+automáticamente los bloques Lisp (líneas que empiezan con \texttt{(}) de los bloques Python.
+
+\section{Mecanismo del Preprocesador}
+
+El preprocesador opera en tres fases:
+\begin{enumerate}
+\item \textbf{Detección de bloques}: Líneas que comienzan con \texttt{(} son Lisp;
+      el resto es Python. Bloques Python se agrupan por indentación.
+\item \textbf{Resolución de símbolos}: Los nombres de funciones Lisp usados en
+      Python se reemplazan por \texttt{builtins.nombre\_cb(args)}.
+      Las referencias \texttt{@variable} en Python se convierten en
+      \texttt{builtins.lispy\_callback\_c('variable')}.
+\item \textbf{Inyección}: Se generan automáticamente \texttt{py:register-callback}
+      para cada \texttt{defun} usado en Python, y cada bloque Python se envuelve
+      en \texttt{py:run}.
+\end{enumerate}
+
+\section{Ejemplo Básico}
+
+\begin{lispcode}
+;;; Archivo hibrido.lp
+(defun sumar (a b) (+ a b))
+(defvar *factor* 10)
+
+x = sumar(3, 4)
+resultado = x * factor
+
+(print @resultado)
+\end{lispcode}
+
+El preprocesador lo convierte automáticamente en:
+
+\begin{lispcode}
+(defun sumar (a b) (+ a b))
+(defvar *factor* 10)
+(py:register-callback 'sumar)
+(py:run "
+import builtins
+x = builtins.sumar_cb(3, 4)
+resultado = x * builtins.lispy_callback_c('*factor*')
+")
+(print @resultado)
+\end{lispcode}
+
+\section{Carga de Archivos Híbridos}
+
+\begin{lispcode}
+;;; Carga explícita
+(py:load-hybrid "archivo.lp")
+
+;;; Carga automática: load detecta archivos híbridos
+(load "archivo.lp")
+\end{lispcode}
+
+\section{Tabla de Ambigüedades}
+
+\begin{center}
+\begin{longtable}{ll}
+\toprule
+\textbf{Caso} & \textbf{Resolución} \\
+\midrule
+\texttt{@var} en Lisp & \texttt{py:\%chain "var"} (sin cambios) \\
+\texttt{@var} en Python & \texttt{builtins.lispy\_callback\_c('var')} \\
+\texttt{fn(args)} (fn es Lisp) & \texttt{builtins.fn\_cb(args)} \\
+\texttt{print(...)} en Python & Se mantiene como Python \\
+\texttt{x = (lisp-form)} & Error: no mezclar en misma línea \\
+\bottomrule
+\end{longtable}
+\end{center}
+
+\section{Ejemplos Avanzados}
+
+\subsection{Funciones Lisp en F-strings de Python}
+\begin{lispcode}
+(defun doble (n) (* 2 n))
+
+x = 21
+print(f"El doble de {x} es {doble(x)}")
+\end{lispcode}
+
+\subsection{Iteración Cruzada}
+\begin{lispcode}
+(defun factorial (n)
+  (if (<= n 1) 1 (* n (factorial (- n 1)))))
+
+for i in range(1, 11):
+    print(f"{i}! = {factorial(i)}")
+\end{lispcode}
+
+\subsection{Variables Lisp en Python}
+\begin{lispcode}
+(defparameter *pi* 3.1415926535)
+(defvar *radio* 5)
+
+area = pi * radio ** 2
+print(f"Área del círculo: {area}")
+\end{lispcode}
+
+\section{Limitaciones}
+
+\begin{itemize}
+\item No se permite mezclar Lisp y Python en la misma línea.
+\item Las funciones Lisp usadas en Python deben estar definidas antes del bloque Python.
+\item Los callbacks son sincrónicos: cada llamada Python$\to$Lisp cruza el puente FFI.
+\end{itemize}
+
+\begin{notebox}[title=Rendimiento]
+Para bucles intensivos (más de 1000 iteraciones con callbacks Lisp), considera
+mover la lógica completa a Lisp o a Python puro con \texttt{py:run}. El overhead
+del puente es significativo en llamadas frecuentes.
+\end{notebox}

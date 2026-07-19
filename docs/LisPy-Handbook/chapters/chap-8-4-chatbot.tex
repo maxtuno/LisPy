@@ -1,0 +1,36 @@
+\chapter{Chatbot con Personalidad}
+\label{chap:chatbot}
+{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$}{\huge$\bigstar$} Experto
+
+\section{Motor de Respuestas}
+\begin{lispcode}
+(defvar *respuestas*
+  '((:saludo "\( ¡ \)Hola! \( ¿ \)C\( ó \)mo est\( á \)s?")
+    (:nombre "Me llamo LisPyBot")
+    (:ayuda "Di: saludo, nombre, tiempo, ayuda, despedida")
+    (:despedida "\( ¡ \)Hasta luego!")))
+
+(defun responder (intencion)
+  (let ((pair (assoc intencion *respuestas*)))
+    (if pair (cadr pair) "No entiendo. Di 'ayuda'")))
+\end{lispcode}
+
+\section{Análisis de Intención}
+\begin{lispcode}
+(defun detectar-intencion (texto)
+  (let ((lower (string-downcase texto)))
+    (cond ((search "hola" lower) :saludo)
+          ((search "nombre" lower) :nombre)
+          ((search "ayuda" lower) :ayuda)
+          ((or (search "adi\( ó \)s" lower) (search "chao" lower)) :despedida)
+          (t :desconocido))))
+\end{lispcode}
+
+\section{Análisis de Sentimiento}
+\begin{lispcode}
+(py:run "from textblob import TextBlob
+def analyze_sentiment(text):
+    blob = TextBlob(text)
+    return {'polarity': blob.sentiment.polarity}")
+\end{lispcode}
+

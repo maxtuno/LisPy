@@ -1,0 +1,144 @@
+% !TEX encoding = UTF-8 Unicode
+\chapter{Kernel Jupyter para LisPy}
+\label{chap:jupyter}
+{\huge$\bigstar$}{\huge$\bigstar$} Intermedio
+
+LisPy incluye un kernel Jupyter completo que permite usar LisPy en Jupyter Notebook,
+JupyterLab y VS Code. El kernel mantiene \textbf{estado persistente} entre celdas:
+variables Lisp, funciones, macros, módulos Python importados y el namespace
+\texttt{\_\_main\_\_} de Python.
+
+\section{Instalación}
+
+\begin{lispcode}
+$ cd jupyter
+$ python install.py
+\end{lispcode}
+
+Esto registra el kernel \texttt{LisPy (Common Lisp + Python)} en Jupyter y configura
+el resaltado de sintaxis CodeMirror para archivos \texttt{.lp}.
+
+\begin{lispcode}
+;;; Verificar instalación
+jupyter kernelspec list
+;;; Debe mostrar: lisPy    C:\Users\...\jupyter\kernels\lisPy
+\end{lispcode}
+
+\section{Arquitectura del Kernel}
+
+\begin{enumerate}
+\item \textbf{Proceso persistente}: El kernel lanza \texttt{lispy.exe --kernel}
+      como subproceso que mantiene todo el estado entre celdas.
+\item \textbf{Preprocesador híbrido}: Cada celda se preprocesa con
+      \texttt{\_lp\_preprocess.py} para soportar sintaxis híbrida
+      Lisp/Python (Capítulo~\ref{chap:hybrid-syntax}).
+\item \textbf{Librerías auto-cargadas}: Al iniciar, el kernel carga automáticamente
+      \texttt{ffi}, \texttt{continuations}, \texttt{defpyfun}, \texttt{defpyclass},
+      \texttt{python-template} y \texttt{persist}.
+\item \textbf{Venv automático}: El kernel detecta y usa el entorno virtual
+      en \texttt{jupyter/venv/} si existe.
+\end{enumerate}
+
+\section{Uso Básico}
+
+\begin{lispcode}
+;;; Celda 1 — Definir función
+(defun fib (n)
+  (if (<= n 1) n (+ (fib (- n 1)) (fib (- n 2)))))
+(fib 20)
+\end{lispcode}
+
+\begin{lispcode}
+;;; Celda 2 — La función persiste (no hay reinicio)
+(mapcar #'fib '(1 2 3 4 5 6 7 8 9 10))
+\end{lispcode}
+
+\begin{lispcode}
+;;; Celda 3 — Python con estado persistente
+(py:import "math")
+(py:call (py:attr math "sqrt") 144)
+\end{lispcode}
+
+\begin{lispcode}
+;;; Celda 4 — Símbolos auto-resueltos (sin re-importar)
+math
+(py:call (py:attr math "cos") 0)
+\end{lispcode}
+
+\section{Sintaxis Híbrida en Celdas}
+
+Cada celda del notebook se procesa automáticamente con el preprocesador híbrido:
+
+\begin{lispcode}
+;;; Definir función Lisp
+(defun cuadrado (x) (* x x))
+
+;;; Usar en Python (misma celda o celda posterior)
+for i in range(1, 6):
+    print(f"{i}² = {cuadrado(i)}")
+\end{lispcode}
+
+\section{Librerías Pesadas (Carga Bajo Demanda)}
+
+\begin{lispcode}
+;;; Cargar NumPy (importa numpy + configura bindings)
+(load "lib/numpy-fast.lp")
+(numpy-linspace 0 pi 5)
+
+;;; Cargar SymPy
+(load "lib/sympy-bridge.lp")
+(let ((x (sympy-symbol "x")))
+  (sympy-derive (sympy-expr (sin (expt x 2))) x))
+\end{lispcode}
+
+\section{Resaltado de Sintaxis}
+
+El kernel incluye soporte para CodeMirror 6 (JupyterLab 4+) con:
+\begin{itemize}
+\item Palabras clave de Common Lisp
+\item Símbolos del paquete \texttt{py:}
+\item Macros de lectura (\texttt{\#\_}, \texttt{\#'}, \texttt{\#(})
+\item Sintaxis híbrida Python embebida
+\end{itemize}
+
+También está disponible la extensión VS Code en \texttt{lp-language/} con soporte
+completo de TextMate grammar para archivos \texttt{.lp}.
+
+\section{Notebook de Demostración}
+
+\begin{lispcode}
+cd jupyter
+jupyter notebook LisPy-Demo.ipynb
+\end{lispcode}
+
+El notebook \texttt{LisPy-Demo.ipynb} contiene 16 secciones que cubren todas las
+capacidades de LisPy, desde aritmética básica hasta machine learning con
+scikit-learn.
+
+\section{Proyectos de Ejemplo}
+
+La carpeta \texttt{jupyter/projects/} contiene 6 proyectos completos autocontenidos:
+\begin{itemize}
+\item \textbf{01 — Análisis de Datos}: Pipeline completo con pandas, matplotlib, GROUP BY
+\item \textbf{02 — Machine Learning}: Clasificación, regresión, pipelines scikit-learn
+\item \textbf{03 — Matemáticas Híbridas}: \texttt{defmath}, SymPy, gradiente, optimización
+\item \textbf{04 — Trading Engine}: CLOS, backtesting, Sharpe ratio
+\item \textbf{05 — Procesamiento de Señales}: FFT, filtros, streaming con generadores
+\item \textbf{06 — Robot 2-DOF}: Lagrange simbólico, solve\_ivp, control PD
+\end{itemize}
+
+\section{Extensión VS Code}
+
+\begin{lispcode}
+;;; Instalar extensión VS Code para archivos .lp
+cd lp-language
+code --install-extension lp-language-0.0.1.vsix
+\end{lispcode}
+
+La extensión proporciona:
+\begin{itemize}
+\item Resaltado de sintaxis (TextMate grammar + Python injection)
+\item Comentarios de línea (\texttt{;}) y bloque (\texttt{\#| |\#})
+\item Bracket matching, auto-closing, folding
+\item Soporte CodeMirror para notebooks integrados en VS Code
+\end{itemize}

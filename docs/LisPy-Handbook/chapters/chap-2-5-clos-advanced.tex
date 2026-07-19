@@ -1,0 +1,44 @@
+\chapter{CLOS Avanzado: Combinación de Métodos}
+\label{chap:clos-advanced}
+{\huge$\bigstar$}{\huge$\bigstar$} Intermedio
+
+\section{Métodos Auxiliares}
+\begin{lispcode}
+(defgeneric procesar (x))
+(defmethod procesar :before ((x numero)) (format t "Antes~%"))
+(defmethod procesar :after ((x numero)) (format t "Después~%"))
+(defmethod procesar ((x numero)) (* x x))
+\end{lispcode}
+
+\section{Orden de Ejecución}
+\begin{enumerate}
+\item \texttt{:around} (más específico primero)
+\item \texttt{:before} (más específico primero)
+\item Método primario
+\item \texttt{:after} (más específico último)
+\end{enumerate}
+
+\section{Métodos Around}
+\begin{lispcode}
+(defmethod procesar :around ((x integer))
+  (format t "Around~%")
+  (let ((r (call-next-method))) (* r 2)))
+\end{lispcode}
+
+\section{Herencia Múltiple}
+\begin{lispcode}
+(defclass a () ((val :initform "A")))
+(defclass b () ((val :initform "B")))
+(defclass c (a b) ())
+\end{lispcode}
+
+\begin{examplebox}[title=Middleware pipeline]
+\begin{lispcode}
+(defgeneric handle-request (req))
+(defmethod handle-request :around (req)
+  (format t "Log: ~A~%" req) (let ((r (call-next-method))) r))
+(defmethod handle-request :before (req) (format t "Validando~%"))
+(defmethod handle-request ((req string)) :ok)
+\end{lispcode}
+\end{examplebox}
+

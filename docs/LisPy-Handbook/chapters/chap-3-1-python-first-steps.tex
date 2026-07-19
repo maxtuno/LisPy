@@ -1,0 +1,41 @@
+\chapter{Primeros Pasos con Python desde Lisp}
+\label{chap:python-firststeps}
+{\huge$\bigstar$}{\huge$\bigstar$} Intermedio
+
+\section{Verificación}
+\begin{lispcode}
+(find-package :py)
+\end{lispcode}
+
+\section{Importar Módulos}
+\begin{lispcode}
+(let ((math (py:import "math"))) (py:call (py:attr math "sqrt") 16))
+\end{lispcode}
+
+\section{Builtins Directos}
+\begin{lispcode}
+(py:print "Hola")
+(py:abs -42)
+(py:sum '(1 2 3 4 5))
+(py:sorted '(3 1 4 1 5))
+(py:len "hello")
+\end{lispcode}
+
+\section{Caché de Módulos}
+\begin{lispcode}
+(time (py:import "math"))  ;; segunda vez: instantáneo
+\end{lispcode}
+
+\section{Llamada Directa}
+\begin{lispcode}
+(let ((sqrt (py:attr (py:import "math") "sqrt"))) (sqrt 144))
+\end{lispcode}
+
+\begin{examplebox}[title=Usando math desde Lisp]
+\begin{lispcode}
+(let ((math (py:import "math")))
+  (format t "pi = ~F~%" (py:attr math "pi"))
+  (format t "sqrt(16) = ~F~%" (py:call (py:attr math "sqrt") 16)))
+\end{lispcode}
+\end{examplebox}
+

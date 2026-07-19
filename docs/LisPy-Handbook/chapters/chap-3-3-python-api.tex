@@ -1,0 +1,40 @@
+\chapter{API Python Completa}
+\label{chap:python-api}
+{\huge$\bigstar$}{\huge$\bigstar$} Intermedio
+
+\section{Acceso por Índice}
+\begin{lispcode}
+(py:getitem lst 1)
+\end{lispcode}
+
+\section{Mutación}
+\begin{lispcode}
+(py:%set-item lst 0 99)
+(py:%set-attr (py:import "__main__") "mi_var" 42)
+\end{lispcode}
+
+\section{Ejecución de Código}
+\begin{lispcode}
+(py:run "def f(n): return n * n")
+(let ((main (py:import "__main__"))) (py:call (py:attr main "f") 5))
+\end{lispcode}
+
+\section{Keyword Arguments}
+\begin{lispcode}
+(let ((kw (make-hash-table :test 'equal)))
+  (setf (gethash "axis" kw) 0)
+  (py:call-kw (py:attr (py:import "numpy") "sum") kw arr))
+\end{lispcode}
+
+\section{Inspección}
+\begin{lispcode}
+(py:type 42) (py:dir (py:import "math")) (py:len '(1 2 3))
+(py:python? x) (py:callable? f)
+\end{lispcode}
+
+\section{Iteración}
+\begin{lispcode}
+(let ((it (py:iter (py:->python '(10 20 30)))))
+  (loop for val = (py:next it) while val collect val))
+\end{lispcode}
+

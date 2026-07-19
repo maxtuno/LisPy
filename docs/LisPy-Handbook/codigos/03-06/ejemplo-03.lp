@@ -1,0 +1,5 @@
+(py:run "def f(): return 1/0")
+(ignore-errors (py:call (py:attr (py:import "__main__") "f")))
+(let* ((frames (py:last-traceback))
+       (frame (elt frames 0)))
+  (format t "Locals: ~A~%" (py:frame-locals frame)))

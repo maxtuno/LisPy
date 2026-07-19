@@ -1,0 +1,6 @@
+(defun walk-ast (ast fn)
+  (let ((result (funcall fn ast)))
+    (if (listp result)
+        (mapcar (lambda (child)
+                  (if (listp child) (walk-ast child fn) child)) result)
+        result)))

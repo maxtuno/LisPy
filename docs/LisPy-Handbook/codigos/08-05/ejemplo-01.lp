@@ -1,0 +1,6 @@
+(defun build-index (documents)
+  (let ((index (make-hash-table :test 'equal)))
+    (dolist (doc documents)
+      (dolist (word (split-string (cadr doc)))
+        (pushnew (car doc) (gethash word index))))
+    index))
