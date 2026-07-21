@@ -117,7 +117,7 @@ r12 = calc.compute(3)
 (print "QA-10l: Python class + Lisp fn OK")
 
 ;; --- Complex 12: Python with-statement reading Lisp @var ---
-(defvar *filename* "test.txt")
+(defvar *filename* "test/test.txt")
 (defvar *content* "hello")
 
 with_written = False

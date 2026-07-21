@@ -1,0 +1,7 @@
+# LisPy test suite Python dependencies
+# Install: pip install -r requirements.txt
+numpy
+sympy
+pandas
+matplotlib
+scipy

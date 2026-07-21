@@ -17,7 +17,7 @@
     (py:call (py:attr plt "figure"))
     (py:call (py:attr plt "plot") x y1 "b-" x y2 "r--")
     (py:call (py:attr plt "title") "Trigonometric Functions")
-    (py:call (py:attr plt "savefig") "advanced/out_01_sine_cosine.png")
+    (py:call (py:attr plt "savefig") "test/advanced/out_01_sine_cosine.png")
     (py:call (py:attr plt "close"))
     (format t "  Saved out_01_sine_cosine.png~%"))
 
@@ -26,7 +26,7 @@
     (py:call (py:attr plt "figure"))
     (py:call (py:attr plt "hist") samples (py:->python 30))
     (py:call (py:attr plt "title") "Normal Distribution")
-    (py:call (py:attr plt "savefig") "advanced/out_02_histogram.png")
+    (py:call (py:attr plt "savefig") "test/advanced/out_02_histogram.png")
     (py:call (py:attr plt "close"))
     (format t "  Saved out_02_histogram.png~%"))
 

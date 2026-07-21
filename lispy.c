@@ -12619,7 +12619,14 @@ static int parse_next_top_level_form(Interp *it,
         return 1;
     }
     *out = parse_expr(it, p, err, errsz);
-    if (*out == NULL) return 0;
+    if (*out == NULL) {
+        parser_skip_ws(p);
+        if (parser_peek(p) == EOF) {
+            *out_eof = 1;
+            return 1;
+        }
+        return 0;
+    }
     *out_eof = 0;
     return 1;
 }
@@ -62269,25 +62276,21 @@ static char *path_with_directory_hint(const char *path, int is_dir) {
 }
 
 static char *canonicalize_existing_path(const char *path, int is_dir, char *err, size_t errsz) {
-    char *resolved = NULL;
+    (void)err; (void)errsz;
 #if defined(_WIN32)
-    resolved = _fullpath(NULL, path, 0);
+    char *resolved = _fullpath(NULL, path, 0);
     if (resolved == NULL) {
         snprintf(err, errsz, "cannot resolve '%s': %s", path, strerror(errno));
         return NULL;
     }
-#else
-    resolved = realpath(path, NULL);
-    if (resolved == NULL) {
-        snprintf(err, errsz, "cannot resolve '%s': %s", path, strerror(errno));
-        return NULL;
-    }
-#endif
     {
         char *hinted = path_with_directory_hint(resolved, is_dir);
         free(resolved);
         return hinted;
     }
+#else
+    return path_with_directory_hint(path, is_dir);
+#endif
 }
 
 static int builtin_merge_pathnames(Interp *it, Env *env, const ValueArray *args, Value **out, char *err, size_t errsz) {
@@ -67803,8 +67806,16 @@ static int builtin_py_chain(Interp *it, Env *env, const ValueArray *args, Value 
             } else {
                 int is_bound = 0;
                 Value *bound = NULL;
-                if (symbol_value_lookup_symbol(it, env, first, &bound, &is_bound) && is_bound)
-                    current = bound;
+                {
+                    Value *sym = first;
+                    if (sym->type != VALUE_SYMBOL) {
+                        sym = make_symbol_value(first_name);
+                    }
+                    if (symbol_value_lookup_symbol(it, env, sym, &bound, &is_bound) && is_bound) {
+                        current = bound;
+                        if (sym != first) { /* free temporary symbol */ }
+                    }
+                }
                 if (current == NULL) {
                     /* Fallback: try *name* for dynamic/special variables */
                     if (first_name[0] != '*') {
@@ -68968,6 +68979,7 @@ static int repl_init(ReplState *rs, Interp *it, Env *global_env) {
     rs->stdout_stream = make_file_stream_value(stdout, "*standard-output*", FILE_STREAM_DIRECTION_OUTPUT, STRING_STREAM_ELEMENT_CHARACTER);
     rs->stderr_stream = make_file_stream_value(stderr, "*error-output*", FILE_STREAM_DIRECTION_OUTPUT, STRING_STREAM_ELEMENT_CHARACTER);
 #if defined(_WIN32)
+    _setmode(_fileno(stdin), _O_TEXT);    /* restore text mode (Python may have set binary) */
     _setmode(_fileno(stdout), _O_TEXT);   /* restore text mode (Python may have set binary) */
 #endif
     setvbuf(stdout, NULL, _IONBF, 0);     /* disable buffering */
@@ -69161,7 +69173,7 @@ static int repl_run(ReplState *rs, Interp *it, Env *global_env, char *err, size_
             break;
         }
 
-        if (!isatty(STDIN_FILENO) || repl_stdin_has_data()) {
+        if (!isatty(STDIN_FILENO)) {
             {
                 size_t line_len = strlen(line);
                 while (rs->buf_len + line_len + 2 > rs->buf_cap)
@@ -69172,36 +69184,19 @@ static int repl_run(ReplState *rs, Interp *it, Env *global_env, char *err, size_
                 rs->buf_len += line_len + 1;
             }
             free(line);
-            if (!isatty(STDIN_FILENO)) {
-                while (1) {
-                    char *next_line = read_line_from_stdin();
-                    if (next_line == NULL) break;
-                    {
-                        size_t nl = strlen(next_line);
-                        while (rs->buf_len + nl + 2 > rs->buf_cap)
-                            rs->buf_cap *= 2;
-                        rs->buffer = (char *)xrealloc(rs->buffer, rs->buf_cap);
-                        memcpy(rs->buffer + rs->buf_len, next_line, nl);
-                        rs->buffer[rs->buf_len + nl] = '\n';
-                        rs->buf_len += nl + 1;
-                    }
-                    free(next_line);
+            while (1) {
+                char *next_line = read_line_from_stdin();
+                if (next_line == NULL) break;
+                {
+                    size_t nl = strlen(next_line);
+                    while (rs->buf_len + nl + 2 > rs->buf_cap)
+                        rs->buf_cap *= 2;
+                    rs->buffer = (char *)xrealloc(rs->buffer, rs->buf_cap);
+                    memcpy(rs->buffer + rs->buf_len, next_line, nl);
+                    rs->buffer[rs->buf_len + nl] = '\n';
+                    rs->buf_len += nl + 1;
                 }
-            } else {
-                while (repl_stdin_has_data()) {
-                    char *next_line = read_line_from_stdin();
-                    if (next_line == NULL) break;
-                    {
-                        size_t nl = strlen(next_line);
-                        while (rs->buf_len + nl + 2 > rs->buf_cap)
-                            rs->buf_cap *= 2;
-                        rs->buffer = (char *)xrealloc(rs->buffer, rs->buf_cap);
-                        memcpy(rs->buffer + rs->buf_len, next_line, nl);
-                        rs->buffer[rs->buf_len + nl] = '\n';
-                        rs->buf_len += nl + 1;
-                    }
-                    free(next_line);
-                }
+                free(next_line);
             }
             rs->buffer[rs->buf_len] = '\0';
         } else {

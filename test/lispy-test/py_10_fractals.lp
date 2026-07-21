@@ -44,7 +44,7 @@
     (py:call (py:attr plt "figure"))
     (py:call (py:attr plt "imshow") divtime)
     (py:call (py:attr plt "title") "Mandelbrot (Lisp-driven)")
-    (py:call (py:attr plt "savefig") "advanced/out_05_mandelbrot.png")
+    (py:call (py:attr plt "savefig") "test/advanced/out_05_mandelbrot.png")
     (py:call (py:attr plt "close"))
     (format t "  Saved out_05_mandelbrot.png~%~%"))
 
